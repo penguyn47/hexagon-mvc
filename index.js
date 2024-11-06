@@ -22,6 +22,7 @@ connectDB();
 
 app.use(express.json());
 app.use(express.static('public'));
+app.use(cors());
 
 app.engine('hbs', engine({
     extname: '.hbs'
