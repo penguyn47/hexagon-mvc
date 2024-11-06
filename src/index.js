@@ -21,9 +21,10 @@ const app = express();
 // connect to db
 connectDB();
 
-app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
-console.log(path.join(__dirname, '../public'));
+
+app.use(express.json());
+
 app.use(cors());
 
 app.engine('hbs', engine({
@@ -39,6 +40,7 @@ app.set('views', path.join(__dirname, '/views'));
 app.use('/', routes);
 
 const port = process.env.PORT || 3000
+
 
 app.listen(port, () => {
     console.log(`Server is running on ${port}`);
