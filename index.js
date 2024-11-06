@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const { engine } = require('express-handlebars');
 const Handlebars = require('handlebars')
-const connectDB = require('./config/mongodb');
+const connectDB = require('./src/config/mongodb');
 
 Handlebars.registerHelper('times', function (n, options) {
     let result = '';
@@ -13,7 +13,7 @@ Handlebars.registerHelper('times', function (n, options) {
 });
 
 // Importing files
-const routes = require('./routes/handlers');
+const routes = require('./src/routes/handlers');
 
 const app = express();
 
