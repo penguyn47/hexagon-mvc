@@ -22,6 +22,10 @@ connectDB();
 
 app.use(express.json());
 app.use(express.static('public'));
+app.use((req, res, next) => {
+    res.setHeader('Content-Security-Policy', "default-src 'none'; script-src 'self' https://vercel.live; style-src 'self' 'unsafe-inline';");
+    next();
+});
 
 app.engine('hbs', engine({
     extname: '.hbs'
