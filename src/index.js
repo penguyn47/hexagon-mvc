@@ -18,9 +18,6 @@ const routes = require('./routes/handlers');
 
 const app = express();
 
-// connect to db
-connectDB();
-
 app.use(express.static(path.join(__dirname, '../public')));
 
 app.use(express.json());
@@ -41,7 +38,13 @@ app.use('/', routes);
 
 const port = process.env.PORT || 3000
 
+// connect to db
+connectDB().then(() => {
+    app.listen(port, () => {
+        console.log(`Server is running on ${port}`);
+    });
+}).catch(() => {
+    console.log("Connection failed!");
+})
 
-app.listen(port, () => {
-    console.log(`Server is running on ${port}`);
-});
+
