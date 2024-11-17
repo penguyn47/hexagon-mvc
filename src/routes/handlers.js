@@ -4,12 +4,17 @@ const router = express.Router();
 const productRoutes = require('../routes/products')
 const userRoutes = require('../routes/users');
 
+const productAPIRoutes = require('../api/productAPI')
+
+const productController = require('../controllers/productController')
+
 // Routing 
 router.get('/', (req, res) => {
     res.render('home');
 });
 
-router.use('/products', productRoutes);
+// APIs
+router.use('/api/products', productAPIRoutes);
 router.use('/users', userRoutes);
 
 
@@ -21,10 +26,12 @@ router.get('/contact', (req, res) => {
     res.render('contact');
 });
 
+router.use('/products', productRoutes);
+
 router.get('/account', (req, res) => {
     res.render('account', {
         layout: 'account_nsigned'
     })
-})
+});
 
 module.exports = router;

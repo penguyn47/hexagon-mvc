@@ -3,7 +3,7 @@ const cloudinary = require('../config/cloudinary');
 
 require('dotenv').config();
 
-exports.getAllProducts = async (req, res) => {
+exports.renderProductsPage = async (req, res) => {
     try {
         const products = await Product.find().lean();
 
@@ -25,7 +25,7 @@ exports.getAllProducts = async (req, res) => {
     }
 };
 
-exports.getProductById = async (req, res) => {
+exports.renderSingleProductPage = async (req, res) => {
     const { id } = req.params;
     try {
         const product = await Product.findById(id);
