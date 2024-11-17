@@ -88,7 +88,7 @@
 
         try {
             // Gửi request POST với JSON body
-            const response = await fetch("/users", { // URL endpoint cho đăng ký
+            const response = await fetch("/api/users", { // URL endpoint cho đăng ký
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -99,7 +99,7 @@
             if (response.ok) {
                 alert("Sign up successful!");
             } else {
-                alert("username is already existed");
+                alert("Username is already existed");
             }
         } catch (error) {
             console.error("Error:", error);

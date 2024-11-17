@@ -1,12 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const productRoutes = require('../routes/products')
-const userRoutes = require('../routes/users');
+const productRoutes = require('../routes/products');
 
+const userAPIRoutes = require('../api/userAPI');
 const productAPIRoutes = require('../api/productAPI')
-
-const productController = require('../controllers/productController')
 
 // Routing 
 router.get('/', (req, res) => {
@@ -15,7 +13,7 @@ router.get('/', (req, res) => {
 
 // APIs
 router.use('/api/products', productAPIRoutes);
-router.use('/users', userRoutes);
+router.use('/api/users', userAPIRoutes);
 
 
 router.get('/about', (req, res) => {
