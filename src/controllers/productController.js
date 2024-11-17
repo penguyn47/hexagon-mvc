@@ -1,11 +1,11 @@
-const Product = require('../models/product.model');  // Import model Product
+const productService = require('../services/productService');
 const cloudinary = require('../config/cloudinary');
 
 require('dotenv').config();
 
 exports.renderProductsPage = async (req, res) => {
     try {
-        const products = await Product.find().lean();
+        const products = await productService.getAllProducts();
 
         products.map((product => {
             product.link = cloudinary.url(product.images[0], {
@@ -21,14 +21,14 @@ exports.renderProductsPage = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({ message: "Lỗi khi lấy danh sách sản phẩm", error });
+        res.status(500).json({ message: "Error when get all products", error });
     }
 };
 
 exports.renderSingleProductPage = async (req, res) => {
     const { id } = req.params;
     try {
-        const product = await Product.findById(id);
+        const product = await productService.getById(id);
         if (!product) {
             return res.status(404).json({ message: "Sản phẩm không tồn tại" });
         }
@@ -43,25 +43,24 @@ exports.renderSingleProductPage = async (req, res) => {
 
         res.render('singleProduct', product);
     } catch (error) {
-        res.status(500).json({ message: "Lỗi khi lấy sản phẩm", error });
+        res.status(500).json({ message: "Error when get product by id", error });
     }
 };
 
 exports.createProduct = async (req, res) => {
     const { name, price, description, rating, quote } = req.body;
-    const images = req.files.map(file => { return file.filename; });
-
-    const product = new Product({
-        name,
-        price,
-        images,
-        description,
-        rating,
-        quote,
-    });
+    const images = req.files.map(file => file.filename);
 
     try {
-        const savedProduct = await product.save();
+        const savedProduct = await productService.createProduct({
+            name,
+            price,
+            description,
+            rating,
+            quote,
+            images
+        });
+
         res.status(201).json(savedProduct);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -70,13 +69,15 @@ exports.createProduct = async (req, res) => {
 
 exports.deleteProduct = async (req, res) => {
     const { id } = req.params;
+
     try {
-        const deletedProduct = await Product.findByIdAndDelete(id);
-        if (!deletedProduct) {
-            return res.status(404).json({ message: "Sản phẩm không tồn tại" });
-        }
-        res.status(200).json({ message: "Sản phẩm đã được xóa thành công" });
+        const deletedProduct = await productService.deleteProduct(id);
+
+        res.status(200).json({ message: 'Product successfully deleted' });
     } catch (error) {
-        res.status(500).json({ message: "Lỗi khi xóa sản phẩm", error });
+        if (error.message === 'Product not found') {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+        res.status(500).json({ message: 'Error deleting product', error: error.message });
     }
 };
