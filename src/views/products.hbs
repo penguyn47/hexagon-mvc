@@ -13,6 +13,24 @@
 </div>
 <!-- ***** Main Banner Area End ***** -->
 
+<!-- ***** Search Area Starts ***** -->
+<section class="search-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <form action="/products" method="GET" class="search-form">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="q" placeholder="Search for products..."
+                            value="{{searchQuery}}">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ***** Search Area Ends ***** -->
+
 <!-- ***** Products Area Starts ***** -->
 <section class="section" id="products">
     <div class="container">
@@ -71,16 +89,17 @@
 <!-- ***** Pagination Area ***** -->
 <div class="pagination">
     {{#if (gt currentPage 1)}}
-    <a href="/products?page={{subtract currentPage 1}}">Previous</a>
+    <a href="/products?page={{subtract currentPage 1}}&q={{searchQuery}}">Previous</a>
     {{/if}}
 
-    {{#each (range 1 totalPages)}}
-    <a href="/products?page={{this}}" class="{{#if (eq ../currentPage this)}}active{{/if}}">{{this}}
+    {{#each (range 1 totalPages searchQuery)}}
+    <a href="/products?page={{this.i}}&q={{this.query}}"
+        class="{{#if (eq ../currentPage this.i)}}active{{/if}}">{{this.i}}
     </a>
     {{/each}}
 
     {{#if (lt currentPage totalPages)}}
-    <a href="/products?page={{add currentPage 1}}">Next</a>
+    <a href="/products?page={{add currentPage 1}}&q={{searchQuery}}">Next</a>
     {{/if}}
 </div>
 <!-- ***** Pagination Area ***** -->

@@ -74,12 +74,12 @@ const addTagsToProduct = async (productId, tagNames) => {
     }
 };
 
-const getProductsWithPaging = async (skip, limit) => {
-    return await Product.find().skip(skip).limit(limit).lean();
+const getProductsWithPaging = async (filters, skip, limit) => {
+    return await Product.find(filters).skip(skip).limit(limit).lean();
 };
 
-const countAllProducts = async () => {
-    return await Product.countDocuments();
+const countAllProducts = async (filters) => {
+    return await Product.countDocuments(filters);
 };
 
 const getRelatedProducts = async (productId) => {

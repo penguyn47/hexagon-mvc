@@ -19,9 +19,20 @@ exports.renderProductsPage = async (req, res) => {
         const limit = 9;
         const skip = (page - 1) * limit;
 
-        const products = await productService.getProductsWithPaging(skip, limit);
+        const searchQuery = req.query.q || '';
 
-        const totalProducts = await productService.countAllProducts();
+        const filters = searchQuery.trim()
+            ? {
+                $or: [
+                    { name: { $regex: new RegExp(searchQuery.trim(), 'i') } },
+                    { description: { $regex: new RegExp(searchQuery.trim(), 'i') } }
+                ]
+            }
+            : {};
+
+        const products = await productService.getProductsWithPaging(filters, skip, limit);
+
+        const totalProducts = await productService.countAllProducts(filters);
         const totalPages = Math.ceil(totalProducts / limit);
 
         products.map((product) => {
@@ -32,12 +43,18 @@ exports.renderProductsPage = async (req, res) => {
         });
 
         res.render('products', {
-            sectionTitle: "Our Latest Products",
-            sectionDescription: "Check out all of our products.",
+            sectionTitle: searchQuery
+                ? `Results for "${searchQuery}"`
+                : "Our Latest Products",
+            sectionDescription: searchQuery
+                ? `Found ${totalProducts} products matching "${searchQuery}"`
+                : "Check out all of our products.",
             products,
             currentPage: page,
-            totalPages
+            totalPages,
+            searchQuery: searchQuery,
         });
+
     } catch (error) {
         res.status(500).json({ message: "Error when get products with paging", error });
     }
