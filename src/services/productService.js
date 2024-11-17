@@ -82,6 +82,28 @@ const countAllProducts = async () => {
     return await Product.countDocuments();
 };
 
+const getRelatedProducts = async (productId) => {
+    try {
+        const product = await Product.findById(productId).populate('tags');
+
+        if (!product) {
+            throw new Error('Product not found');
+        }
+
+        const tagIds = product.tags.map(tag => tag._id);
+
+        const relatedProducts = await Product.find({
+            _id: { $ne: productId },
+            tags: { $in: tagIds }
+        }).lean();
+
+        return relatedProducts;
+    } catch (error) {
+        console.error('Error fetching related products:', error);
+        throw error;
+    }
+};
+
 module.exports = {
     getAllProducts,
     getById,
@@ -90,4 +112,5 @@ module.exports = {
     addTagsToProduct,
     getProductsWithPaging,
     countAllProducts,
+    getRelatedProducts,
 };

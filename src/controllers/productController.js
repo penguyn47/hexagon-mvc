@@ -4,6 +4,15 @@ const cloudinary = require('../config/cloudinary');
 
 require('dotenv').config();
 
+const processImages = (images) => {
+    return images.map(public_id =>
+        cloudinary.url(public_id, {
+            crop: 'auto',
+            quality: 'auto'
+        })
+    );
+};
+
 exports.renderProductsPage = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
@@ -39,18 +48,32 @@ exports.renderSingleProductPage = async (req, res) => {
     try {
         const product = await productService.getById(id);
         if (!product) {
-            return res.status(404).json({ message: "Sản phẩm không tồn tại" });
+            return res.status(404).json({ message: "Product not found" });
         }
+
         product.images = product.images.map((public_id) =>
             cloudinary.url(public_id, {
-                width: 500,
-                height: 500,
                 crop: 'auto',
                 quality: 'auto'
             })
         );
 
-        res.render('singleProduct', product);
+        const relatedProducts = await productService.getRelatedProducts(id);
+
+        relatedProducts.forEach((relatedProduct) => {
+            relatedProduct.images = processImages(relatedProduct.images);
+        });
+
+        res.render('singleProduct', {
+            images: product.images,
+            name: product.name,
+            price: product.price,
+            rating: product.rating,
+            description: product.description,
+            quote: product.quote,
+            relatedProducts: relatedProducts
+
+        });
     } catch (error) {
         res.status(500).json({ message: "Error when get product by id", error });
     }

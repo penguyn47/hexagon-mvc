@@ -11,4 +11,7 @@ module.exports = {
     eq: (a, b) => a === b,
     gt: (a, b) => a > b,
     lt: (a, b) => a < b,
+    getImage: (images, index) => {
+        return images && images[index] ? images[index] : '';
+    }
 };
