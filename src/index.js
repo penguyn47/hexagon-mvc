@@ -5,12 +5,18 @@ const Handlebars = require('handlebars')
 const connectDB = require('./config/mongodb');
 const cors = require('cors');
 
+const handlebarsHelper = require('./helpers/handlebarsHelper')
+
 Handlebars.registerHelper('times', function (n, options) {
     let result = '';
     for (let i = 0; i < n; i++) {
         result += options.fn(i);
     }
     return result;
+});
+
+Object.entries(handlebarsHelper).forEach(([name, fn]) => {
+    Handlebars.registerHelper(name, fn);
 });
 
 // Importing files

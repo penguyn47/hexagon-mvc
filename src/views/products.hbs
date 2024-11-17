@@ -67,3 +67,20 @@
     </div>
 </section>
 <!-- ***** Products Area Ends ***** -->
+
+<!-- ***** Pagination Area ***** -->
+<div class="pagination">
+    {{#if (gt currentPage 1)}}
+    <a href="/products?page={{subtract currentPage 1}}">Previous</a>
+    {{/if}}
+
+    {{#each (range 1 totalPages)}}
+    <a href="/products?page={{this}}" class="{{#if (eq ../currentPage this)}}active{{/if}}">{{this}}
+    </a>
+    {{/each}}
+
+    {{#if (lt currentPage totalPages)}}
+    <a href="/products?page={{add currentPage 1}}">Next</a>
+    {{/if}}
+</div>
+<!-- ***** Pagination Area ***** -->

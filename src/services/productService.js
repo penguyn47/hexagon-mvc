@@ -74,10 +74,20 @@ const addTagsToProduct = async (productId, tagNames) => {
     }
 };
 
+const getProductsWithPaging = async (skip, limit) => {
+    return await Product.find().skip(skip).limit(limit).lean();
+};
+
+const countAllProducts = async () => {
+    return await Product.countDocuments();
+};
+
 module.exports = {
     getAllProducts,
     getById,
     createProduct,
     deleteProduct,
     addTagsToProduct,
+    getProductsWithPaging,
+    countAllProducts,
 };

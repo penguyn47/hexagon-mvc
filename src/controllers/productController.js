@@ -6,23 +6,31 @@ require('dotenv').config();
 
 exports.renderProductsPage = async (req, res) => {
     try {
-        const products = await productService.getAllProducts();
+        const page = parseInt(req.query.page) || 1;
+        const limit = 9;
+        const skip = (page - 1) * limit;
 
-        products.map((product => {
+        const products = await productService.getProductsWithPaging(skip, limit);
+
+        const totalProducts = await productService.countAllProducts();
+        const totalPages = Math.ceil(totalProducts / limit);
+
+        products.map((product) => {
             product.link = cloudinary.url(product.images[0], {
                 crop: 'auto',
                 quality: 'auto'
             });
-        }))
+        });
 
         res.render('products', {
             sectionTitle: "Our Latest Products",
             sectionDescription: "Check out all of our products.",
-            products: products
+            products,
+            currentPage: page,
+            totalPages
         });
-
     } catch (error) {
-        res.status(500).json({ message: "Error when get all products", error });
+        res.status(500).json({ message: "Error when get products with paging", error });
     }
 };
 
