@@ -1,4 +1,5 @@
 const Product = require('../models/product.model');
+const Tag = require('../models/tag.model');
 
 const getAllProducts = async () => {
     try {
@@ -50,9 +51,33 @@ const deleteProduct = async (productId) => {
     }
 };
 
+const addTagsToProduct = async (productId, tagNames) => {
+    try {
+        const product = await Product.findById(productId);
+        if (!product) {
+            throw new Error('Product not found');
+        }
+
+        const tags = await Tag.find({ 'name': { $in: tagNames } });
+        if (tags.length !== tagNames.length) {
+            throw new Error('Some tags are invalid');
+        }
+
+        const tagIds = tags.map(tag => tag._id);
+
+        product.tags.push(...tagIds);
+        await product.save();
+
+        return product;
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = {
     getAllProducts,
     getById,
     createProduct,
-    deleteProduct
+    deleteProduct,
+    addTagsToProduct,
 };

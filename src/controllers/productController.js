@@ -1,4 +1,5 @@
 const productService = require('../services/productService');
+const tagService = require('../services/tagService')
 const cloudinary = require('../config/cloudinary');
 
 require('dotenv').config();
@@ -81,3 +82,26 @@ exports.deleteProduct = async (req, res) => {
         res.status(500).json({ message: 'Error deleting product', error: error.message });
     }
 };
+
+exports.addTagController = async (req, res) => {
+    const { name } = req.body;
+
+    try {
+        const newTag = await tagService.addNewTag(name);
+        res.status(201).json(newTag);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+exports.addTagToProduct = async (req, res) => {
+    const { names } = req.body;
+    const { id } = req.params;
+
+    try {
+        const updatedProduct = await productService.addTagsToProduct(id, names);
+        res.status(200).json(updatedProduct);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}

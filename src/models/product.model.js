@@ -24,6 +24,10 @@ const productSchema = new mongoose.Schema({
     quote: {
         type: String,
     },
+    tags: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Tag'
+    }],
 });
 
 const Product = mongoose.model('Product', productSchema);
