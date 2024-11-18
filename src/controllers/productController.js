@@ -45,7 +45,7 @@ exports.renderProductsPage = async (req, res) => {
         }
 
         if (categoryQuery.trim() != '') {
-            filters.category = { $regex: new RegExp(categoryQuery.trim(), 'i') };
+            filters.category = categoryQuery.trim();
         }
 
         filters.rating = { $gte: minRating };
