@@ -1,8 +1,8 @@
 module.exports = {
-    range: function (start, end, query) {
+    range: function (start, end, query, category, brand, min, max, rating) {
         let result = [];
         for (let i = start; i <= end; i++) {
-            result.push({ i, query });
+            result.push({ i, query, category, brand, min, max, rating });
         }
         return result;
     },

@@ -150,17 +150,19 @@
 <!-- ***** Pagination Area ***** -->
 <div class="pagination">
     {{#if (gt currentPage 1)}}
-    <a href="/products?page={{subtract currentPage 1}}&q={{searchQuery}}">Previous</a>
+    <a
+        href="/products?page={{subtract currentPage 1}}&q={{searchQuery}}&category={{category}}&brand={{brand}}&minPrice={{minPrice}}&maxPrice={{maxPrice}}&rating={{rating}}">Previous</a>
     {{/if}}
 
-    {{#each (range 1 totalPages searchQuery)}}
-    <a href="/products?page={{this.i}}&q={{this.query}}"
+    {{#each (range 1 totalPages searchQuery category brand minPrice maxPrice rating)}}
+    <a href="/products?page={{this.i}}&q={{this.query}}&category={{this.category}}&brand={{this.brand}}&minPrice={{this.min}}&maxPrice={{this.max}}&rating={{this.rating}}"
         class="{{#if (eq ../currentPage this.i)}}active{{/if}}">{{this.i}}
     </a>
     {{/each}}
 
     {{#if (lt currentPage totalPages)}}
-    <a href="/products?page={{add currentPage 1}}&q={{searchQuery}}">Next</a>
+    <a
+        href="/products?page={{add currentPage 1}}&q={{searchQuery}}&category={{category}}&brand={{brand}}&minPrice={{minPrice}}&maxPrice={{maxPrice}}&rating={{rating}}">Next</a>
     {{/if}}
 </div>
 <!-- ***** Pagination Area ***** -->
