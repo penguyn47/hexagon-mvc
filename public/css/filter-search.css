@@ -1,0 +1,132 @@
+/* Filter Area Styling */
+.filter-area {
+    padding: 30px 0;
+    border-top: 2px solid #ddd;
+    border-bottom: 2px solid #ddd;
+}
+
+.filter-area h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #3a3a3a;
+}
+
+.filter-form {
+    margin-top: 20px;
+}
+
+.filter-form .form-group {
+    margin-bottom: 15px;
+}
+
+.filter-form label {
+    font-weight: 500;
+    color: #3a3a3a;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.filter-form .form-control {
+    border: 1px solid #3a3a3a;
+    border-radius: 4px;
+    height: 38px;
+    padding: 0 10px;
+    font-size: 14px;
+    color: #3a3a3a;
+    background-color: #fff;
+}
+
+.filter-form .form-control:focus {
+    border-color: #3a3a3a;
+    box-shadow: 0 0 3px rgba(58, 58, 58, 0.5);
+}
+
+.filter-form .btn-primary {
+    background-color: #3a3a3a;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.filter-form .btn-primary:hover {
+    background-color: #2e2e2e;
+}
+
+.filter-form .d-flex {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-form .d-flex input[type="number"] {
+    flex: 1;
+}
+
+.filter-form .mx-2 {
+    margin: 0 5px;
+    line-height: 36px;
+}
+
+/* Search Area Styling */
+.search-area {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.search-area .input-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-area .input-group input {
+    width: 70%;
+    max-width: 500px;
+    padding: 10px 15px;
+    border-radius: 4px 0 0 4px;
+    border: 1px solid #3a3a3a;
+    color: #3a3a3a;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.search-area .input-group input:focus {
+    border-color: #3a3a3a;
+}
+
+.search-area .input-group button {
+    padding: 10px 20px;
+    border-radius: 0 4px 4px 0;
+    background-color: #3a3a3a;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-area .input-group button:hover {
+    background-color: #2e2e2e;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .filter-form .form-group {
+        margin-bottom: 20px;
+    }
+
+    .search-area .input-group input {
+        width: 100%;
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
+
+    .search-area .input-group button {
+        width: 100%;
+        border-radius: 4px;
+    }
+}

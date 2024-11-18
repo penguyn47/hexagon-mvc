@@ -26,8 +26,17 @@ const productSchema = new mongoose.Schema({
     },
     tags: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Tag'
+        ref: 'Tag',
+        default: [],
     }],
+    category: {
+        type: String,
+        default: "",
+    },
+    brand: {
+        type: String,
+        default: "",
+    },
 });
 
 const Product = mongoose.model('Product', productSchema);

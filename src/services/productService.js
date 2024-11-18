@@ -20,7 +20,7 @@ const getById = async (id) => {
 }
 
 const createProduct = async (productData) => {
-    const { name, price, description, rating, quote, images } = productData;
+    const { name, price, description, rating, quote, images, category, brand } = productData;
 
     const product = new Product({
         name,
@@ -28,6 +28,8 @@ const createProduct = async (productData) => {
         images,
         description,
         rating,
+        category,
+        brand,
         quote,
     });
 

@@ -19,7 +19,13 @@ exports.renderProductsPage = async (req, res) => {
         const limit = 9;
         const skip = (page - 1) * limit;
 
+        // Search & filters
         const searchQuery = req.query.q || '';
+        const minPrice = req.query.minPrice ? parseFloat(req.query.minPrice) : 0;
+        const maxPrice = req.query.maxPrice ? parseFloat(req.query.maxPrice) : '';
+        const brandQuery = req.query.brand || '';
+        const minRating = req.query.rating || 0;
+        const categoryQuery = req.query.category || '';
 
         const filters = searchQuery.trim()
             ? {
@@ -29,6 +35,20 @@ exports.renderProductsPage = async (req, res) => {
                 ]
             }
             : {};
+        filters.price = { $gte: minPrice };
+        if (req.query.maxPrice) {
+            filters.price.$lte = maxPrice;
+        }
+
+        if (brandQuery.trim() != '') {
+            filters.brand = { $regex: new RegExp(brandQuery.trim(), 'i') };
+        }
+
+        if (categoryQuery.trim() != '') {
+            filters.category = { $regex: new RegExp(categoryQuery.trim(), 'i') };
+        }
+
+        filters.rating = { $gte: minRating };
 
         const products = await productService.getProductsWithPaging(filters, skip, limit);
 
@@ -53,6 +73,20 @@ exports.renderProductsPage = async (req, res) => {
             currentPage: page,
             totalPages,
             searchQuery: searchQuery,
+            categories: [
+                "Womens",
+                "Mens",
+                "Kids",
+                "Accessories",
+            ],
+            brands: [
+                "penguyn47",
+            ],
+            category: categoryQuery,
+            brand: brandQuery,
+            minPrice: minPrice,
+            maxPrice: maxPrice,
+            rating: minRating,
         });
 
     } catch (error) {
@@ -97,8 +131,11 @@ exports.renderSingleProductPage = async (req, res) => {
 };
 
 exports.createProduct = async (req, res) => {
-    const { name, price, description, rating, quote } = req.body;
+    const { name, price, description, rating, quote, category, brand } = req.body;
     const images = req.files.map(file => file.filename);
+
+    console.log(category);
+    console.log(brand);
 
     try {
         const savedProduct = await productService.createProduct({
@@ -107,7 +144,9 @@ exports.createProduct = async (req, res) => {
             description,
             rating,
             quote,
-            images
+            images,
+            category,
+            brand,
         });
 
         res.status(201).json(savedProduct);
