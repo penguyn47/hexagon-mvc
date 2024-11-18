@@ -63,6 +63,7 @@ exports.renderProductsPage = async (req, res) => {
         });
 
         res.render('products', {
+            page: 'products',
             sectionTitle: searchQuery
                 ? `Results for "${searchQuery}"`
                 : "Our Latest Products",
@@ -116,6 +117,7 @@ exports.renderSingleProductPage = async (req, res) => {
         });
 
         res.render('singleProduct', {
+            page: 'products',
             images: product.images,
             name: product.name,
             price: product.price,
