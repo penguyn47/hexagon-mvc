@@ -1,139 +1,144 @@
-<div id="container" class="container">
-    <!-- FORM SECTION -->
-    <div class="row">
-        <!-- SIGN UP -->
-        <div class="col align-items-center flex-col sign-up">
-            <div class="form-wrapper align-items-center">
-                <div class="form sign-up">
-                    <div class="input-group">
-                        <i class='bx bxs-user'></i>
-                        <input type="text" id="signup-username" placeholder="Username">
-                    </div>
-                    <div class="input-group">
-                        <i class='bx bx-mail-send'></i>
-                        <input type="email" id="signup-email" placeholder="Email">
-                    </div>
-                    <div class="input-group">
-                        <i class='bx bxs-lock-alt'></i>
-                        <input type="password" id="signup-password" placeholder="Password">
-                    </div>
-                    <div class="input-group">
-                        <i class='bx bxs-lock-alt'></i>
-                        <input type="password" id="signup-confirm-password" placeholder="Confirm password">
-                    </div>
-                    <button id="signup-btn">
-                        Sign up
-                    </button>
-                    <p>
-                        <span>Already have an account?</span>
-                        <b onclick="toggle()" class="pointer">Sign in here</b>
-                    </p>
-                    <p>
-                        <a href="/" class="pointer">Home</a>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <!-- END SIGN UP -->
+<br>
+<br>
+<br>
 
-        <!-- SIGN IN -->
-        <div class="col align-items-center flex-col sign-in">
-            <div class="form-wrapper align-items-center">
-                <div class="form sign-in">
-                    <div class="input-group">
-                        <i class='bx bxs-user'></i>
-                        <input type="text" id="signin-username" placeholder="Username">
+<!-- ***** Login Area Starts ***** -->
+<div class="contact-us">
+    <div class="container">
+        <div class="row">
+            <!-- Login Form: Hiển thị nếu type-auth là "login" -->
+            {{#if (eq type_auth "log")}}
+            <div class="col-lg-6">
+                <div class="section-heading">
+                    <h2>Login</h2>
+                    <span>Please log in using your personal information to stay connected with us.</span>
+                </div>
+                <form id="login-form" action="" method="post">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input name="username" type="text" id="username" class="form-control"
+                            placeholder="Enter your username" required="">
                     </div>
-                    <div class="input-group">
-                        <i class='bx bxs-lock-alt'></i>
-                        <input type="password" id="signin-password" placeholder="Password">
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input name="password" type="password" id="password" class="form-control"
+                            placeholder="Enter your password" required="">
                     </div>
-                    <button id="signin-btn">
-                        Sign in
-                    </button>
-                    <p><b>Forgot password?</b></p>
-                    <p>
-                        <span>Don't have an account?</span>
-                        <b onclick="toggle()" class="pointer">Sign up here</b>
-                    </p>
-                    <p>
-                        <a href="/" class="pointer">Home</a>
-                    </p>
+                    <div class="form-group">
+                        <button type="submit" id="form-submit" class="btn btn-primary btn-block w-100">Login</button>
+                    </div>
+                </form>
+                <!-- Thêm phần đăng ký -->
+                <div class="register-link">
+                    <p>Don't have an account? <a href="/account/register" class="btn btn-link">Register</a></p>
                 </div>
             </div>
+
+            <div class="col-lg-6">
+                <div class="login-image">
+                    <img src="/images/baner-right-image-04.jpg" alt="Login Illustration" class="img-fluid w-100"
+                        style="max-width: 100%; height: auto;">
+                </div>
+            </div>
+            {{/if}}
+
+            <!-- Register Form: Hiển thị nếu type-auth là "reg" -->
+            {{#if (eq type_auth "reg")}}
+            <div class="col-lg-6">
+                <div class="login-image">
+                    <img src="/images/baner-right-image-01.jpg" alt="Login Illustration" class="img-fluid w-100"
+                        style="max-width: 100%; height: auto;">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="section-heading">
+                    <h2>Register</h2>
+                    <span>Please fill in your details to create a new account.</span>
+                </div>
+                <form id="register-form" action="" method="post">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input name="username" type="text" id="username" class="form-control"
+                            placeholder="Enter your username" required="">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input name="email" type="email" id="email" class="form-control" placeholder="Enter your email"
+                            required="">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input name="password" type="password" id="password" class="form-control"
+                            placeholder="Enter your password" required="">
+                    </div>
+                    <div class="form-group">
+                        <label for="repassword">Confirm Password</label>
+                        <input name="repassword" type="password" id="repassword" class="form-control"
+                            placeholder="Confirm your password" required="">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" id="form-submit" class="btn btn-primary btn-block w-100">Register</button>
+                    </div>
+                </form>
+                <div class="login-link">
+                    <p>Already have an account? <a href="/account/login" class="btn btn-link">Login</a></p>
+                </div>
+            </div>
+            <script>
+                // Select the form and add an event listener for form submission
+                document.getElementById("register-form").addEventListener("submit", async (event) => {
+                    event.preventDefault(); // Prevent the default form submission
+
+                    // Get the input values
+                    const username = document.getElementById("username").value;
+                    const email = document.getElementById("email").value;
+                    const password = document.getElementById("password").value;
+                    const repassword = document.getElementById("repassword").value;
+
+                    // Validate the passwords match
+                    if (password !== repassword) {
+                        alert("Passwords do not match!");
+                        return;
+                    }
+
+                    // Prepare the data to send to the server
+                    const data = { username, email, password };
+
+                    try {
+                        // Send the data using Fetch API
+                        const response = await fetch("/api/users/", {  // The endpoint for registration
+                            method: "POST", // HTTP method POST
+                            headers: {
+                                "Content-Type": "application/json", // Sending JSON data
+                            },
+                            body: JSON.stringify(data), // The data being sent in the request body
+                        });
+
+                        // Handle the response
+                        if (response.ok) {
+                            // Parse the response if registration is successful
+                            const result = await response.json();
+                            console.log(result); // Log the result for debugging or redirect
+
+                            // Redirect the user or show a success message
+                            alert("Registration successful! Please log in.");
+                            window.location.href = "/account/login";  // Redirect to login page after successful registration
+                        } else {
+                            // Handle error response (e.g., username already taken)
+                            const error = await response.json();
+                            alert(error.message || "Registration failed. Please try again.");
+                        }
+                    } catch (error) {
+                        // Handle network or other errors
+                        console.error("Error:", error);
+                        alert("There was a problem with the registration request.");
+                    }
+                });
+
+            </script>
+            {{/if}}
+
         </div>
-        <!-- END SIGN IN -->
     </div>
 </div>
-
-<script>
-    // Gửi yêu cầu POST cho form Sign Up
-    document.getElementById("signup-btn").addEventListener("click", async function (event) {
-        event.preventDefault();
-
-        // Lấy dữ liệu từ các input
-        const username = document.getElementById("signup-username").value;
-        const email = document.getElementById("signup-email").value;
-        const password = document.getElementById("signup-password").value;
-        const confirmPassword = document.getElementById("signup-confirm-password").value;
-
-        // Kiểm tra mật khẩu xác nhận
-        if (password !== confirmPassword) {
-            alert("Passwords do not match!");
-            return;
-        }
-
-        // Tạo JSON object
-        const data = { username, email, password };
-
-        try {
-            // Gửi request POST với JSON body
-            const response = await fetch("/api/users", { // URL endpoint cho đăng ký
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            });
-
-            if (response.ok) {
-                alert("Sign up successful!");
-            } else {
-                alert("Username is already existed");
-            }
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    });
-
-    // Gửi yêu cầu POST cho form Sign In
-    document.getElementById("signin-btn").addEventListener("click", async function (event) {
-        event.preventDefault();
-
-        // Lấy dữ liệu từ các input
-        const username = document.getElementById("signin-username").value;
-        const password = document.getElementById("signin-password").value;
-
-        // Tạo JSON object
-        const data = { username, password };
-
-        try {
-            // Gửi request POST với JSON body
-            const response = await fetch("/signin", { // URL endpoint cho đăng nhập
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            });
-
-            if (response.ok) {
-                alert("Sign in successful!");
-            } else {
-                alert("Sign in failed!");
-            }
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    });
-</script>
+<!-- ***** Login Area Ends ***** -->

@@ -32,9 +32,24 @@ router.get('/contact', (req, res) => {
 
 router.use('/products', productRoutes);
 
-router.get('/account', (req, res) => {
+router.get('/account/', (req, res) => {
     res.render('account', {
-        layout: 'account_nsigned'
+        page: 'account',
+        type_auth: 'log',
+    })
+});
+
+router.get('/account/login', (req, res) => {
+    res.render('account', {
+        page: 'account',
+        type_auth: 'log',
+    })
+});
+
+router.get('/account/register', (req, res) => {
+    res.render('account', {
+        page: 'account',
+        type_auth: 'reg',
     })
 });
 
