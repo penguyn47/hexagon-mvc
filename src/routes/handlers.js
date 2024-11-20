@@ -32,7 +32,7 @@ router.get('/contact', (req, res) => {
 
 router.use('/products', productRoutes);
 
-router.get('/account/', (req, res) => {
+router.get('/account', (req, res) => {
     res.render('account', {
         page: 'account',
         type_auth: 'log',
