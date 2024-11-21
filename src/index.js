@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+var bodyParser = require("body-parser");
 const { engine } = require('express-handlebars');
 const Handlebars = require('handlebars')
 const connectDB = require('./config/mongodb');
@@ -25,7 +26,7 @@ const routes = require('./routes/handlers');
 const app = express();
 
 app.use(express.static(path.join(__dirname, '../public')));
-
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use(cors());
