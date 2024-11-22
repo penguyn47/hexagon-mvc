@@ -18,13 +18,16 @@ exports.createUser = async (req, res) => {
   }
 };
 
-
 exports.loginUser = async (req, res) => {
   const { username, password } = req.body;
-  const user = await userService.loginUser({
+  try {
+    const user = await userService.loginUser({
       username,
       password,
-  });
-  console.log(user);
-  res.send("OK");
+    });
+    res.cookie("auth_token", user.token);
+    res.redirect("/");
+  } catch (error) {
+    res.redirect("/account");
+  }
 };

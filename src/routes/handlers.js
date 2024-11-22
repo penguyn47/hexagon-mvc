@@ -52,4 +52,9 @@ router.get("/account/register", (req, res) => {
   });
 });
 
+router.get("/account/logout", (req, res) => {
+  res.clearCookie("auth_token");
+  res.redirect("/");
+});
+
 module.exports = router;
