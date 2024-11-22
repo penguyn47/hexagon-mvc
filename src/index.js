@@ -1,57 +1,61 @@
-const express = require('express');
-const path = require('path');
+const express = require("express");
+const path = require("path");
 var bodyParser = require("body-parser");
-const { engine } = require('express-handlebars');
-const Handlebars = require('handlebars')
-const connectDB = require('./config/mongodb');
-const cors = require('cors');
+const cookieParser = require("cookie-parser");
+const { engine } = require("express-handlebars");
+const Handlebars = require("handlebars");
+const connectDB = require("./config/mongodb");
+const cors = require("cors");
 
-const handlebarsHelper = require('./helpers/handlebarsHelper')
+const handlebarsHelper = require("./helpers/handlebarsHelper");
 
-Handlebars.registerHelper('times', function (n, options) {
-    let result = '';
-    for (let i = 0; i < n; i++) {
-        result += options.fn(i);
-    }
-    return result;
+Handlebars.registerHelper("times", function (n, options) {
+  let result = "";
+  for (let i = 0; i < n; i++) {
+    result += options.fn(i);
+  }
+  return result;
 });
 
 Object.entries(handlebarsHelper).forEach(([name, fn]) => {
-    Handlebars.registerHelper(name, fn);
+  Handlebars.registerHelper(name, fn);
 });
 
 // Importing files
-const routes = require('./routes/handlers');
+const routes = require("./routes/handlers");
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, "../public")));
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use(express.json());
 
 app.use(cors());
 
-app.engine('hbs', engine({
-    extname: '.hbs'
-}));
+app.engine(
+  "hbs",
+  engine({
+    extname: ".hbs",
+  })
+);
 
-app.set('view engine', 'hbs');
+app.set("view engine", "hbs");
 
-app.set('views', path.join(__dirname, '/views'));
-
+app.set("views", path.join(__dirname, "/views"));
 
 // Configure Routes
-app.use('/', routes);
+app.use("/", routes);
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3000;
 
 // connect to db
-connectDB().then(() => {
+connectDB()
+  .then(() => {
     app.listen(port, () => {
-        console.log(`Server is running on ${port}`);
+      console.log(`Server is running on ${port}`);
     });
-}).catch(() => {
+  })
+  .catch(() => {
     console.log("Connection failed!");
-})
-
-
+  });

@@ -19,9 +19,14 @@
                                 {{/if}}>About</a></li>
                         <li class="scroll-to-section"><a href="/contact" {{#if (eq page "contact" )}} class="active"
                                 {{/if}}>Contact</a></li>
+                        {{#if (eq userName "GUEST")}}
                         <li class="scroll-to-section"><a href="/account" {{#if (eq page "account" )}} class="active"
                                 {{/if}}>Account</a></li>
-                    </ul>
+                        {{else}}
+                        <li class="scroll-to-section"><a href="/account/logout" {{#if (eq page "account" )}} class="active"
+                                {{/if}}>Logout</a></li>
+                                <p>{{userName}}</p>
+                        {{/if}}
                     <a class='menu-trigger'>
                         <span>Menu</span>
                     </a>

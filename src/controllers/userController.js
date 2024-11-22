@@ -25,6 +25,7 @@ exports.loginUser = async (req, res) => {
       username,
       password,
     });
+    res.cookie("user_name", user.username);
     res.cookie("auth_token", user.token);
     res.redirect("/");
   } catch (error) {
