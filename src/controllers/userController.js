@@ -17,18 +17,3 @@ exports.createUser = async (req, res) => {
       .json({ message: "Error creating user", error: error.message });
   }
 };
-
-exports.loginUser = async (req, res) => {
-  const { username, password } = req.body;
-  try {
-    const user = await userService.loginUser({
-      username,
-      password,
-    });
-    res.cookie("user_name", user.username);
-    res.cookie("auth_token", user.token);
-    res.redirect("/");
-  } catch (error) {
-    res.redirect("/account");
-  }
-};

@@ -66,7 +66,7 @@ exports.renderProductsPage = async (req, res) => {
       });
     });
 
-    const userName = req.cookies.user_name || "GUEST";
+    const userName = req.user ? req.user.username : "GUEST";
     res.render("products", {
       userName: userName,
       page: "products",
@@ -116,7 +116,7 @@ exports.renderSingleProductPage = async (req, res) => {
       relatedProduct.images = processImages(relatedProduct.images);
     });
 
-    const userName = req.cookies.user_name || "GUEST";
+    const userName = req.user ? req.user.username : "GUEST";
     res.render("singleProduct", {
       userName: userName,
       page: "products",
