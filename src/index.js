@@ -55,7 +55,15 @@ app.set("views", path.join(__dirname, "/views"));
 app.use(express.urlencoded({ extended: true }));
 // Change
 app.use(
-  session({ secret: "secret-key", resave: false, saveUninitialized: true })
+  session({
+    secret: "secret-key",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 1000 * 60 * 30,
+      secure: false,
+    },
+  })
 );
 app.use(passport.initialize());
 app.use(passport.session());
