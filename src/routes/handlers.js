@@ -6,13 +6,13 @@ const userAPIRoutes = require("../api/userAPI");
 const productAPIRoutes = require("../api/productAPI");
 
 // Routing
-router.get("/", (req, res) => {
-  const userName = req.user ? req.user.username : "GUEST";
-  res.render("home", {
-    page: "home",
-    userName: userName,
-  });
-});
+// router.get("/", (req, res) => {
+//   const userName = req.user ? req.user.username : "GUEST";
+//   res.render("home", {
+//     page: "home",
+//     userName: userName,
+//   });
+// });
 
 // APIs
 router.use("/api/products", productAPIRoutes);

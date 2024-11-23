@@ -118,6 +118,14 @@ app.post(
   })
 );
 
+app.get("/", (req, res) => {
+  const userName = req.user ? req.user.username : "GUEST";
+  res.render("home", {
+    page: "home",
+    userName: userName,
+  });
+});
+
 const port = process.env.PORT || 3000;
 
 // connect to db
