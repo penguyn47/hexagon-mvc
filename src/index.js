@@ -8,8 +8,6 @@ const connectDB = require("./config/mongodb");
 const cors = require("cors");
 const session = require("express-session");
 
-const jwt = require("jsonwebtoken");
-
 // Change
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
@@ -55,21 +53,18 @@ app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "/views"));
 
 app.use(express.urlencoded({ extended: true }));
-
 // Change
-// Cấu hình session
 app.use(
   session({
-    secret: "secret-key", // Khóa bí mật để mã hóa session
-    resave: false, // Không lưu lại session nếu không có thay đổi
-    saveUninitialized: true, // Lưu session ngay cả khi chưa khởi tạo dữ liệu
+    secret: "secret-key",
+    resave: false,
+    saveUninitialized: true,
     cookie: {
-      maxAge: 1000 * 60 * 30, // Session tồn tại 30 phút
-      secure: false, // Chỉ bật secure khi chạy HTTPS
+      maxAge: 1000 * 60 * 30,
+      secure: false,
     },
   })
 );
-
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -102,19 +97,14 @@ passport.use(
 
 // Save info to session
 passport.serializeUser((user, done) => {
-  const token = jwt.sign({ id: user.id }, "your-secret-key", {
-    expiresIn: "30m", // 30 min
-  });
-  done(null, token);
+  done(null, user.id);
 });
 
 // Get info session
-passport.deserializeUser((token, done) => {
+passport.deserializeUser(async (id, done) => {
   try {
-    const decoded = jwt.verify(token, "your-secret-key"); // Xác minh token
-    User.findById(decoded.id).then((user) => {
-      done(null, user); // Trả về thông tin người dùng từ token
-    });
+    const user = await User.findById(id);
+    done(null, user);
   } catch (error) {
     done(error, null);
   }
@@ -123,19 +113,10 @@ passport.deserializeUser((token, done) => {
 app.post(
   "/account/login",
   passport.authenticate("local", {
-    successRedirect: "/", // Chuyển hướng nếu đăng nhập thành công
-    failureRedirect: "/account/login", // Chuyển hướng nếu thất bại
-    failureFlash: false, // Không sử dụng flash messages
-  }),
-  (req, res) => {
-    // Sau khi đăng nhập thành công, lưu token vào cookie
-    res.cookie("token", req.user.token, {
-      httpOnly: true, // Cookie không thể truy cập từ JavaScript
-      secure: false, // Chỉ bật secure khi chạy HTTPS
-      maxAge: 1000 * 60 * 30, // Thời gian hết hạn cookie (30 phút)
-    });
-    res.redirect("/"); // Redirect về trang chính
-  }
+    successRedirect: "/",
+    failureRedirect: "/account/login",
+    failureFlash: false, // Enable if using flash messages
+  })
 );
 
 const port = process.env.PORT || 3000;
