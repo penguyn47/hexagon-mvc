@@ -14,6 +14,18 @@ router.get("/", (req, res) => {
   });
 });
 
+// Admin route
+router.get("/admin", (req, res) => {
+  const userName = req.user ? req.user.username : "GUEST";
+  res.render("admin", {
+    page: "admin",
+    userName: userName,
+  });
+});
+
+
+
+
 // APIs
 router.use("/api/products", productAPIRoutes);
 router.use("/api/users", userAPIRoutes);
