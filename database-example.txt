@@ -26,7 +26,8 @@ Product
 - price
 - stock_quanity
 - createdAt
-- url
+- url           --thumbnail
+- urls          --pictures
 
 ProductRelated
 - product_id_1 (PK)

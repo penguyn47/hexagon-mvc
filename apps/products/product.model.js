@@ -30,10 +30,15 @@ const Product = db.define('product', {
         type: DataTypes.INTEGER,
     },
 
-    url: {
+    url: { // thumbnail
         type: DataTypes.STRING,
         defaultValue: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOtjqFKVwZWNCqI33H1OWcsUaZYww6FLLFAw&s',
-    }
+    },
+
+    urls: {
+        type: DataTypes.JSON, // Sử dụng JSON để lưu danh sách URL
+        defaultValue: [],
+    },
 },
     {
         timestamps: true, // Kích hoạt timestamps
