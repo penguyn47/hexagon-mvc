@@ -13,5 +13,12 @@ module.exports = {
     lt: (a, b) => a < b,
     getImage: (images, index) => {
         return images && images[index] ? images[index] : '';
-    }
+    },
+    times: (n, options) => {
+        let result = "";
+        for (let i = 0; i < n; i++) {
+            result += options.fn(i);
+        }
+        return result;
+    },
 };

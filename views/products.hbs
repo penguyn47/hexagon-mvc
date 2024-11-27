@@ -1,0 +1,140 @@
+<!-- ***** Main Banner Area Start ***** -->
+<div class="page-heading" id="top">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="inner-content">
+                    <h2>Check Our Products</h2>
+                    <span>Awesome &amp; Creative HTML CSS layout by TemplateMo</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ***** Main Banner Area End ***** -->
+
+<!-- ***** Filter Area Starts ***** -->
+<section class="filter-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <form action="/products" method="GET" class="filter-form">
+                    <div class="row">
+                        <!-- Category Filter -->
+                        <div class="col-lg-3 col-md-6">
+                            <div class="form-group">
+                                <label for="category">Category</label>
+                                <select id="category" name="category" class="form-control">
+                                    <option value="">Select Category</option>
+                                    
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Brand Filter -->
+                        <div class="col-lg-3 col-md-6">
+                            <div class="form-group">
+                                <label for="manufacturer">Manufacturer</label>
+                                <select id="manufacturer" name="manufacturer" class="form-control">
+                                    <option value="">Select Manufacturer</option>
+                                    
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Money Range Filter (Min and Max) -->
+                        <div class="col-lg-3 col-md-6">
+                            <div class="form-group">
+                                <label for="price-range">Price Range</label>
+                                <div class="d-flex">
+                                    <input type="number" id="min-price" name="minPrice" class="form-control"
+                                        placeholder="Min" value="{{minPrice}}" min="0" />
+                                    <span class="mx-2">to</span>
+                                    <input type="number" id="max-price" name="maxPrice" class="form-control"
+                                        placeholder="Max" value="{{maxPrice}}" min="0" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Rating Filter -->
+                        <div class="col-lg-3 col-md-6">
+                            <div class="form-group">
+                                <label for="rating">Rating</label>
+                                <select id="rating" name="rating" class="form-control">
+                                    <option value="">Select Rating</option>
+                                    <option value="1">1 Star</option>
+                                    <option value="2">2 Stars</option>
+                                    <option value="3">3 Stars</option>
+                                    <option value="4">4 Stars</option>
+                                    <option value="5">5 Stars</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <section class="search-area">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-7">
+                                    <div class="input-group">
+                                        <input id="search-query" type="text" class="form-control" name="q"
+                                            placeholder="Search for products...">
+                                        <button id="apply-filters" class="btn btn-primary">Search</button>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <!-- Nút sắp xếp -->
+                                        <span>Sort with</span>
+                                        <button id="sort-latest" class="btn btn-outline-primary">Year</button>
+                                        <button id="sort-price" class="btn btn-outline-primary">Price</button>
+                                        <button id="sort-rating" class="btn btn-outline-primary">Rating</button>
+                                        <!-- Nút chỉnh tăng/giảm -->
+                                        <button id="toggle-sort-order" class="btn btn-outline-secondary active" style="width: 120px;">
+                                            Ascending
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ***** Filter Area Ends ***** -->
+
+<!-- ***** Pagination Area ***** -->
+<div class="pagination" id="pagination-top">
+</div>
+<!-- ***** Pagination Area ***** -->
+
+<!-- ***** Products Area Starts ***** -->
+<section class="section" id="products">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-heading">
+                    <h2 id="sectionTitle"></h2>
+                    <span id="sectionDescription"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row" id="product-list">
+            
+        </div>
+    </div>
+</section>
+<!-- ***** Products Area Ends ***** -->
+
+<!-- ***** Pagination Area ***** -->
+<div class="pagination" id="pagination-bot">
+</div>
+<!-- ***** Pagination Area ***** -->
+
+
+
+<script src="/js/pagination-filter.js"></script>
