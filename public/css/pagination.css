@@ -31,3 +31,11 @@
     pointer-events: none;
     cursor: default;
   }
+
+/* Nút bị mờ (không khả dụng) */
+.pagination a.disabled {
+  color: #999;
+  border-color: #ccc;
+  cursor: not-allowed;
+  pointer-events: none;
+}

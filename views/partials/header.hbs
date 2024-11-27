@@ -1,0 +1,41 @@
+<!-- ***** Header Area Start ***** -->
+<header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <a href="/" class="logo">
+                        <img src="/images/logo.png">
+                    </a>
+                    <!-- ***** Logo End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <li class="scroll-to-section"><a href="/" {{#if (eq currentView "home" )}} class="active" {{/if}}>Home</a></li>
+                        <li class="scroll-to-section"><a href="/products" {{#if (eq currentView "products" )}} class="active"{{/if}}>Products</a></li>
+                        <li class="scroll-to-section"><a href="/about" {{#if (eq currentView "about" )}} class="active"{{/if}}>About</a></li>
+                        <li class="scroll-to-section"><a href="/contact" {{#if (eq currentView "contact" )}} class="active"{{/if}}>Contact</a></li>
+                        {{#if name}}
+                            <li class="scroll-to-section"><a href="/users/login" {{#if (eq currentView "login" )}} class="active"{{/if}}>
+                            <img src="{{profileImg}}" alt="Login Icon" style="width: 40px; height: 40px; margin-right: 5px; border-radius:50%;object-fit: cover;object-position: center;">
+                            {{name}}</a></li>
+                            <li class="scroll-to-section"><a href="/users/logout" {{#if (eq currentView "login" )}} class="active"{{/if}}><i class="fas fa-sign-in-alt"></i>  Logout</a></li> 
+                            
+                        {{else}}
+                            <li class="scroll-to-section">
+                                <a href="/users/login" {{#if (eq currentView "login" )}} class="active"{{/if}}>
+                                    Login
+                                </a>
+                            </li>
+                        {{/if}}
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                        
+                        <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- ***** Header Area End ***** -->

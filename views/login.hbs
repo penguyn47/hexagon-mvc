@@ -1,0 +1,46 @@
+<br>
+<br>
+<br>
+<div class="contact-us">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+            <div class="section-heading">
+                <h2>Login</h2>
+                <span>Please log in using your personal information to stay connected with us.</span>
+            </div>
+            <form id="login-form" action="#" method="post">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input name="username" type="text" id="username" class="form-control"
+                        placeholder="Enter your username" required="">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input name="password" type="password" id="password" class="form-control"
+                        placeholder="Enter your password" required="">
+                </div>
+                <div class="form-group">
+                    <button type="submit" id="form-submit" class="btn btn-primary btn-block w-100">Login</button>
+                </div>
+            </form>
+            <!-- Thêm phần đăng ký -->
+            <div class="login-link section-heading">
+                <p style="font-size: 1.25rem;">Don't have an account? <a href="/users/register" class="btn btn-link">
+                    <span style="font-size: 1.25rem; color: black; font-weight: 600;">Register</span></a>
+                </p>
+            </div>
+            <div id="alert-container"></div> <!-- Container để hiển thị các alert -->
+            </div>
+
+            <div class="col-lg-6">
+            <div class="login-image">
+                <img src="/images/baner-right-image-04.jpg" alt="Login Illustration" class="img-fluid w-100"
+                    style="max-width: 100%; height: auto; border-radius:20px">
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/login.js"></script>
