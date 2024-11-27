@@ -144,6 +144,32 @@ const productService = {
             throw error;
         }
     },
+
+    // Lấy 4 sản phẩm cùng category với sản phẩm hiện tại
+    async getRelatedProductsByCategory(productId) {
+        try {
+            // Lấy thông tin sản phẩm theo ID
+            const product = await Product.findByPk(productId);
+            if (!product) {
+                throw new Error('Product not found');
+            }
+
+            // Lấy 4 sản phẩm cùng category
+            const relatedProducts = await Product.findAll({
+                where: {
+                    category: product.category,
+                    id: { [Op.ne]: productId }, // Loại bỏ sản phẩm hiện tại
+                },
+                limit: 4, // Lấy 4 sản phẩm
+                order: [['createdAt', 'DESC']], // Sắp xếp theo ngày tạo (hoặc có thể thay đổi)
+            });
+
+            return relatedProducts;
+        } catch (error) {
+            throw new Error('Error fetching related products: ' + error.message);
+        }
+    },
+
 };
 
 module.exports = productService;

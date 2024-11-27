@@ -92,11 +92,14 @@ const productController = {
         try {
             const productId = req.params.id; // Lấy id từ URL
             const product = await productService.getProductById(productId);
+            let relatedProducts = await productService.getRelatedProductsByCategory(productId);
+            relatedProducts = relatedProducts.map(product => product.dataValues);
             res.render('singleProduct', {
                 currentView: 'products',
                 name: req.user?.username,
                 profileImg: req.user?.picture,
                 product: product.dataValues,
+                relatedProducts: relatedProducts,
             })
         } catch (error) {
             res.status(404).json({ message: error.message }); // Nếu không tìm thấy, trả về 404
