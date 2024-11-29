@@ -35,4 +35,13 @@ router.get('/products', (req, res) => {
 })
 
 
+router.get('/admin', (req, res) => {
+    res.render('admin', {
+        currentView: 'admin',
+        name: req.user?.username,
+        profileImg: req.user?.picture,
+    })
+})
+
+
 module.exports = router;

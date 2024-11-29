@@ -61,6 +61,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', require('./index.routes'));
 app.use('/users', require('./apps/users/user.routes'));
 app.use('/products', require('./apps/products/product.routes'));
+// Admin routes
+app.use('/admin', require('./apps/admin/admin.routes'));
+
 
 // Kết nối database
 const connectDB = async () => {

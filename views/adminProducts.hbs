@@ -1,0 +1,30 @@
+<div class="container">
+    <h2>Admin - View Products</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Rating</th>
+                <th>Category</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each products}}
+            <tr>
+                <td>{{this.name}}</td>
+                <td>{{this.price}}</td>
+                <td>{{this.description}}</td>
+                <td>{{this.rating}}</td>
+                <td>{{this.category}}</td>
+                <td>
+                    <a href="/admin/products/{{this.id}}/edit" class="btn btn-warning">Edit</a>
+                    <a href="/admin/products/{{this.id}}/delete" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

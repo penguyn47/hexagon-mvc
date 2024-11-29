@@ -1,4 +1,4 @@
-document.getElementById("login-form").addEventListener("submit", async function (e) {
+document.getElementById("login-form-admin").addEventListener("submit", async function (e) {
     e.preventDefault(); // Ngăn form reload trang
 
     // Lấy giá trị từ các trường input
@@ -28,7 +28,7 @@ document.getElementById("login-form").addEventListener("submit", async function 
 
     try {
         // Gửi yêu cầu POST đến API backend
-        const response = await fetch("/users/login", {
+        const response = await fetch("/admin/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -46,8 +46,8 @@ document.getElementById("login-form").addEventListener("submit", async function 
             if (response.status == 401) {
                 showAlert("danger", "Username and password is not matched");
             }
-            if (response.status === 403) {
-                showAlert("danger", "You do not have permission to access this resource.");
+            if (response.status == 403) {
+                showAlert("danger", "You do not have admin privileges.");
             }
         }
     } catch (err) {

@@ -59,33 +59,33 @@
 <!-- ***** Add Product Area Ends ***** -->
 
 <script>
-document.getElementById('addProductForm').addEventListener('submit', async function(event) {
-    event.preventDefault();
-    const form = event.target;
-    const formData = new FormData(form);
+    document.getElementById('addProductForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const form = event.target;
+        const formData = new FormData(form);
 
-    try {
-        const response = await fetch(form.action, {
-            method: form.method,
-            body: formData
-        });
-        const result = await response.json();
-        const notification = document.getElementById('notification');
+        try {
+            const response = await fetch(form.action, {
+                method: form.method,
+                body: formData
+            });
+            const result = await response.json();
+            const notification = document.getElementById('notification');
 
-        if (result.success) {
-            notification.className = 'alert alert-success';
-            notification.textContent = result.message;
-        } else {
+            if (result.success) {
+                notification.className = 'alert alert-success';
+                notification.textContent = result.message;
+            } else {
+                notification.className = 'alert alert-danger';
+                notification.textContent = result.message;
+            }
+            notification.style.display = 'block';
+        } catch (error) {
+            console.error('Error:', error);
+            const notification = document.getElementById('notification');
             notification.className = 'alert alert-danger';
-            notification.textContent = result.message;
+            notification.textContent = 'An error occurred while adding the product.';
+            notification.style.display = 'block';
         }
-        notification.style.display = 'block';
-    } catch (error) {
-        console.error('Error:', error);
-        const notification = document.getElementById('notification');
-        notification.className = 'alert alert-danger';
-        notification.textContent = 'An error occurred while adding the product.';
-        notification.style.display = 'block';
-    }
-});
+    });
 </script>
