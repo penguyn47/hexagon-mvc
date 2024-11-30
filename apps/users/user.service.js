@@ -21,6 +21,20 @@ const userService = {
     }
   },
 
+  // Tạo người dùng từ thông tin lấy từ email
+  async createUserEmail(userData) {
+    try {
+      const hashedPassword = await bcrypt.hash(userData.password, 10); // Mã hóa mật khẩu
+      const newUser = await User.create({
+        ...userData,
+        password: hashedPassword, // Lưu mật khẩu đã mã hóa
+      });
+      return newUser;
+    } catch (error) {
+      throw new Error("Error creating user: " + error.message);
+    }
+  },
+
   // Lấy người dùng theo id
   async getUserById(userId) {
     try {
