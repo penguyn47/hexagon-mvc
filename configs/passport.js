@@ -13,15 +13,14 @@ module.exports = function(passport) {
                     return done(null, false, {message: 'Username and password is not matched!'});
                 }
 
-                if (!user.isVerify) {
-                    return done(null, false, { message: "User email not verified" });
-                }
-                
                 bcrypt.compare(password, user.password, (err, isMatch) => {
                     if(err) throw err;
 
                     if(isMatch){
-                        return done(null, user);
+                        if (!user.isVerify) {
+                            return done(null, false, { message: "Please active your account with registed email!" });
+                        }
+                        return done(null, user, {message: "Login successfully"});
                     } else {
                         return done(null, false, {message: 'Username and password is not matched!'});
                     }

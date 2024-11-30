@@ -36,16 +36,15 @@ document.getElementById("login-form").addEventListener("submit", async function 
             body: JSON.stringify(data),
         });
 
-        // Kiểm tra phản hồi từ server
-        if (response.ok) {
-            console.log(response);
-            if (response.redirected){
-                window.location.href = response.url;
-            }
+        const resData = await response.json();
+
+        if(response.ok == false){
+            showAlert("danger", resData.message);
         } else {
-            if (response.status == 401){
-                showAlert("danger","Username and password is not matched");
-            }
+            showAlert("success", resData.message + "\nRedirecting...");
+            setTimeout(() => {
+                window.location.href = "/";
+            }, 3000);
         }
     } catch (err) {
         console.error("Error during registration:", err);

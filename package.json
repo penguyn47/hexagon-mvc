@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "node app.js",
     "dev": "nodemon app.js"
   },
   "keywords": [],
@@ -13,6 +13,7 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
+    "connect-flash": "^0.1.1",
     "connect-mongo": "^5.1.0",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
