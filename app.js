@@ -7,6 +7,8 @@ const db = require('./configs/db');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const passport = require('passport');
+const cors = require('cors');
+const flash = require('connect-flash');
 
 const app = express();
 
@@ -21,6 +23,8 @@ app.use(express.json());
 // Sử dụng x-www-form-urlencoded parser
 app.use(express.urlencoded({ extended: true }));
 
+app.use(cors());
+
 // Express session
 app.use(session({
     store: MongoStore.create({
@@ -30,7 +34,10 @@ app.use(session({
     secret: 'penguynSecret',
     resave: false,
     saveUninitialized: true,
-}))
+}));
+
+// Flash middlewares
+app.use(flash());
 
 // Passport middlewares
 app.use(passport.session());
