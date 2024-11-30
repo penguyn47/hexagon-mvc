@@ -59,13 +59,13 @@ module.exports = function (passport) {
           //   Nếu không thấy thì tạo mới
           if (!user) {
             const newUser = {
-              username: profile.displayName,
+              username: email,
               email: email,
               password: null,
               isVerify: true,
               firstName: profile.name.givenName,
               lastName: profile.name.familyName,
-              phone: profile.phoneNumber || null,
+              url: profile.photos[0].value,
               //   Lỗi hiển thị hình
               //   url:
               //     profile.photos[0].value ||
@@ -77,10 +77,6 @@ module.exports = function (passport) {
               password: "",
             });
             return done(null, createdUser);
-          }
-
-          if (!user.isVerify) {
-            return done(null, false, { message: "User email not verified" });
           }
           // Return user
           return done(null, user);

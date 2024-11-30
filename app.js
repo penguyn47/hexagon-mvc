@@ -7,6 +7,7 @@ const db = require('./configs/db');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const passport = require('passport');
+const cors = require('cors');
 
 const app = express();
 
@@ -20,6 +21,8 @@ require('./configs/passport')(passport);
 app.use(express.json());
 // Sử dụng x-www-form-urlencoded parser
 app.use(express.urlencoded({ extended: true }));
+
+app.use(cors());
 
 // Express session
 app.use(session({
