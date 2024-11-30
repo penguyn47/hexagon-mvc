@@ -230,7 +230,6 @@ const userController = {
     }
   },
 
-<<<<<<< HEAD
   // Quên mật khẩu
   async forgotPassword(req, res) {
     try {
@@ -252,13 +251,11 @@ const userController = {
       res.status(400).json({ message: "Invalid token or error resetting password" }); // Đảm bảo JSON khi có lỗi
     }
   },
-=======
   // Render trang cá nhân
   async renderProfile(req, res) {
     res.send("PROFILE PAGE");
   },
 
->>>>>>> e6e0d4a6cc1c9134d221c475a94eb063904f2377
 };
 
 module.exports = userController;
