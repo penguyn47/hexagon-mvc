@@ -24,7 +24,8 @@ const userService = {
   // Tạo người dùng từ thông tin lấy từ email
   async createUserEmail(userData) {
     try {
-      const hashedPassword = await bcrypt.hash(userData.password, 10); // Mã hóa mật khẩu
+      const randomPassword = Math.random().toString(36).slice(-8); // Tạo mật khẩu ngẫu nhiên
+      const hashedPassword = await bcrypt.hash(randomPassword, 10); // Mã hóa mật khẩu
       const newUser = await User.create({
         ...userData,
         password: hashedPassword, // Lưu mật khẩu đã mã hóa
