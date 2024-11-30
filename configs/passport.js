@@ -22,14 +22,17 @@ module.exports = function (passport) {
               return done(null, false, { message: "User email not verified" });
             }
 
-            bcrypt.compare(password, user.password, (err, isMatch) => {
-              if (err) throw err;
+                bcrypt.compare(password, user.password, (err, isMatch) => {
+                    if(err) throw err;
 
-              if (isMatch) {
-                return done(null, user);
-              } else {
-                return done(null, false, {
-                  message: "Username and password is not matched!",
+                    if(isMatch){
+                        if (!user.isVerify) {
+                            return done(null, false, { message: "Please active your account with registed email!" });
+                        }
+                        return done(null, user, {message: "Login successfully"});
+                    } else {
+                        return done(null, false, {message: 'Username and password is not matched!'});
+                    }
                 });
               }
             });
@@ -59,13 +62,13 @@ module.exports = function (passport) {
           //   Nếu không thấy thì tạo mới
           if (!user) {
             const newUser = {
-              username: profile.displayName,
+              username: email,
               email: email,
               password: null,
               isVerify: true,
               firstName: profile.name.givenName,
               lastName: profile.name.familyName,
-              phone: profile.phoneNumber || null,
+              url: profile.photos[0].value,
               //   Lỗi hiển thị hình
               //   url:
               //     profile.photos[0].value ||
@@ -77,10 +80,6 @@ module.exports = function (passport) {
               password: "",
             });
             return done(null, createdUser);
-          }
-
-          if (!user.isVerify) {
-            return done(null, false, { message: "User email not verified" });
           }
           // Return user
           return done(null, user);

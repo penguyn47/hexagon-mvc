@@ -1,6 +1,7 @@
 const userService = require("./user.service");
 const passport = require("passport");
 
+
 const userController = {
   // Tạo người dùng mới
   async createUser(req, res) {
@@ -154,8 +155,24 @@ const userController = {
 
   // Đăng nhập người dùng
   async loginUser(req, res, next) {
-    passport.authenticate("local", {
-      successRedirect: "/",
+    // passport.authenticate("local", {
+    //   successRedirect: "/",
+    // })(req, res, next);
+
+    passport.authenticate("local", (err, user, info) => {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        return res.status(401).json({message: info.message });
+      }
+      req.logIn(user, (err) => {
+        if (err) {
+          return next(err);
+        }
+        // Đăng nhập thành công
+        return res.status(200).json({message: info.message });
+      });
     })(req, res, next);
   },
 
@@ -213,6 +230,7 @@ const userController = {
     }
   },
 
+<<<<<<< HEAD
   // Quên mật khẩu
   async forgotPassword(req, res) {
     try {
@@ -234,6 +252,13 @@ const userController = {
       res.status(400).json({ message: "Invalid token or error resetting password" }); // Đảm bảo JSON khi có lỗi
     }
   },
+=======
+  // Render trang cá nhân
+  async renderProfile(req, res) {
+    res.send("PROFILE PAGE");
+  },
+
+>>>>>>> e6e0d4a6cc1c9134d221c475a94eb063904f2377
 };
 
 module.exports = userController;
