@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
 });
 
 module.exports.sendVerificationEmail = async (email, token) => {
-  const verificationLink = `http://127.0.0.1:3000/users/verify?token=${token}`;
+  const verificationLink = `${process.env.HOST}/users/verify?token=${token}`;
   const mailOptions = {
     from: process.env.EMAIL,
     to: email,
