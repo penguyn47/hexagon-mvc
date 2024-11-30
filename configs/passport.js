@@ -1,4 +1,5 @@
 const LocalStrategy = require('passport-local').Strategy;
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const bcrypt = require('bcrypt');
 const userService = require('../apps/users/user.service');
 const userController = require('../apps/users/user.controller');
@@ -10,6 +11,10 @@ module.exports = function(passport) {
             .then(user => {
                 if(!user) {
                     return done(null, false, {message: 'Username and password is not matched!'});
+                }
+
+                if (!user.isVerify) {
+                    return done(null, false, { message: "User email not verified" });
                 }
                 
                 bcrypt.compare(password, user.password, (err, isMatch) => {
@@ -24,6 +29,38 @@ module.exports = function(passport) {
             })
             .catch(err => console.log(err));
         })
+    );
+
+    passport.use(
+        new GoogleStrategy(
+            {
+                clientID: process.env.GOOGLE_CLIENT_ID,
+                clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+                callbackURL: process.env.CALLBACK_URL,
+            },
+            async (accessToken, refreshToken, profile, done) => {
+                try {
+                    const email = profile.emails[0].value;
+
+                    // Find user
+                    const user = await userService.getUserByEmail(email);
+
+                    if (!user) {
+                        return done(null, false, {
+                            message: "Email not registered in the system",
+                        });
+                    }
+                    
+                    if (!user.isVerify) {
+                        return done(null, false, { message: "User email not verified" });
+                    }
+                    // Return user
+                    return done(null, user);
+                } catch (err) {
+                    return done(err);
+                }
+            }
+        )
     );
 
     // passport.serializeUser((user, done) => {
