@@ -162,33 +162,37 @@ const userController = {
     })(req, res, next);
   },
 
-    // Đăng nhập người dùng bằng Google (Phải đăng ký gmail trước)
+  // Đăng nhập người dùng bằng Google (Phải đăng ký gmail trước)
   async loginWithGoogle(req, res) {
     passport.authenticate("google", { scope: ["profile", "email"] })(req, res);
   },
 
-    // Call back cho Google
+  // Call back cho Google
   async callbackGoogle(req, res, next) {
-    passport.authenticate("google", { failureRedirect: "/users/login" }, (err, user, info) => {
+    passport.authenticate(
+      "google",
+      { failureRedirect: "/users/login" },
+      (err, user, info) => {
         if (!user) {
-            // Người dùng không tồn tại hoặc email chưa được xác minh
-            // Chưa có thông báo
-            return res.redirect("/users/login");
+          // Người dùng không tồn tại hoặc email chưa được xác minh
+          // Chưa có thông báo
+          return res.redirect("/users/login");
         }
         if (!user.isVerify) {
-            // Email chưa được xác minh
-            // Chưa có thông báo
-            return res.redirect("/users/login");
+          // Email chưa được xác minh
+          // Chưa có thông báo
+          return res.redirect("/users/login");
         }
 
         // Xác thực thành công, đăng nhập người dùng
         req.login(user, (err) => {
-            if (err) {
-                return next(err);
-            }
-            return res.redirect("/");
+          if (err) {
+            return next(err);
+          }
+          return res.redirect("/");
         });
-    })(req, res, next);
+      }
+    )(req, res, next);
   },
 
   async logoutUser(req, res) {
