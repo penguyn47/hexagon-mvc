@@ -1,6 +1,7 @@
 const userService = require("./user.service");
 const passport = require("passport");
 
+
 const userController = {
   // Tạo người dùng mới
   async createUser(req, res) {
@@ -210,6 +211,12 @@ const userController = {
       res.status(500).send("Error verifying account");
     }
   },
+
+  // Render trang cá nhân
+  async renderProfile(req, res) {
+    res.send("PROFILE PAGE");
+  },
+
 };
 
 module.exports = userController;
