@@ -138,6 +138,20 @@ const userController = {
     });
   },
 
+  // Trang ForgotPassword
+  async renderForgotPasswordPage(req, res) {
+    res.render("forgot-password", {
+      currentView: "forgot",
+    });
+  },
+
+  // Trang điền thông tin để cập nhật
+  async renderResetPasswordPage(req, res) {
+    res.render("reset-password", {
+      currentView: "reset",
+    });
+  },
+
   // Đăng nhập người dùng
   async loginUser(req, res, next) {
     passport.authenticate("local", {
@@ -196,6 +210,28 @@ const userController = {
       res.redirect("/users/login");
     } catch (err) {
       res.status(500).send("Error verifying account");
+    }
+  },
+
+  // Quên mật khẩu
+  async forgotPassword(req, res) {
+    try {
+      const { gmail } = req.body;
+      await userService.forgotPassword(gmail);
+      res.redirect("/users/reset-password")
+    } catch (err) {
+      res.status(500).send("Error sending password reset link");
+    }
+  },
+
+  // Đặt lại mật khẩu
+  async resetPassword(req, res) {
+    try {
+      const { token, password } = req.body;      
+      const user = await userService.resetPassword(token, password);
+      res.status(200).json({ message: user.message }); // Trả về JSON khi thành công
+    } catch (err) {
+      res.status(400).json({ message: "Invalid token or error resetting password" }); // Đảm bảo JSON khi có lỗi
     }
   },
 };

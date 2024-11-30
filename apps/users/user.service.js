@@ -161,6 +161,59 @@ const userService = {
       return { error: err.message };
     }
   },
+
+  async forgotPassword(email) {
+    try {
+      const user = await User.findOne({
+        where: { email: email },
+      });
+      if (!user) {
+        return { message: "User not found" };
+      }
+      if (!user.isVerify) {
+        return { error: "User account is not verify." };
+      }
+      const token = await bcrypt.genSalt(10);
+      user.resetPasswordToken = token;
+      user.resetPasswordExpires = Date.now() + 900000; // 15 minutes
+      await user.save();
+
+      await emailHelper.sendResetPasswordEmail(user.email, token);
+      return { message: "Password reset email sent" };
+    } catch (error) {
+      return { message: "Internal server error" };
+    }
+  },
+
+  async resetPassword(token, newPassword) {
+    try {
+      const user = await User.findOne({
+        where: {
+          resetPasswordToken: token,
+          resetPasswordExpires: { [Op.gt]: Date.now() },
+        },
+      });
+
+      if (!user) {
+        return { message: "Invalid token" };
+      }
+
+      if (!user.isVerify) {
+        return { error: "User account is not verify." };
+      }
+
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      user.password = hashedPassword;
+      user.resetPasswordToken = null; // Xóa token
+      user.resetPasswordExpires = null; // Xóa thời gian hết hạn
+      await user.save();
+
+      return { message: "Password reset successful" };
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      return { message: "Internal server error" };
+    }
+  },
 };
 
 module.exports = userService;
