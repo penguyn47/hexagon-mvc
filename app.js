@@ -8,6 +8,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const passport = require('passport');
 const cors = require('cors');
+const flash = require('connect-flash');
 
 const app = express();
 
@@ -33,7 +34,10 @@ app.use(session({
     secret: 'penguynSecret',
     resave: false,
     saveUninitialized: true,
-}))
+}));
+
+// Flash middlewares
+app.use(flash());
 
 // Passport middlewares
 app.use(passport.session());

@@ -1,6 +1,7 @@
 const userService = require("./user.service");
 const passport = require("passport");
 
+
 const userController = {
   // Tạo người dùng mới
   async createUser(req, res) {
@@ -140,8 +141,24 @@ const userController = {
 
   // Đăng nhập người dùng
   async loginUser(req, res, next) {
-    passport.authenticate("local", {
-      successRedirect: "/",
+    // passport.authenticate("local", {
+    //   successRedirect: "/",
+    // })(req, res, next);
+
+    passport.authenticate("local", (err, user, info) => {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        return res.status(401).json({message: info.message });
+      }
+      req.logIn(user, (err) => {
+        if (err) {
+          return next(err);
+        }
+        // Đăng nhập thành công
+        return res.status(200).json({message: info.message });
+      });
     })(req, res, next);
   },
 
@@ -198,6 +215,12 @@ const userController = {
       res.status(500).send("Error verifying account");
     }
   },
+
+  // Render trang cá nhân
+  async renderProfile(req, res) {
+    res.send("PROFILE PAGE");
+  },
+
 };
 
 module.exports = userController;
