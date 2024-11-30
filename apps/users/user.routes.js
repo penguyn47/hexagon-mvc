@@ -13,4 +13,9 @@ router.get("/logout", userController.logoutUser);
 
 router.get("/verify", userController.verifyAccount);
 
+
+// How to use http://localhost:3000/users/login/auth/google
+router.get("/login/auth/google",userController.loginWithGoogle);
+router.get("/login/auth/google/callback",userController.callbackGoogle);
+
 module.exports = router;
