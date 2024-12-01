@@ -6,40 +6,32 @@ const userController = require("../apps/users/user.controller");
 
 module.exports = function (passport) {
   passport.use(
-    new LocalStrategy(
-      { usernameField: "username" },
-      (username, password, done) => {
-        userService
-          .getUserByUsername(username)
+    new LocalStrategy({ usernameField: "username" }, (username, password, done) => {
+        userService.getUserByUsername(username)
           .then((user) => {
             if (!user) {
-              return done(null, false, {
-                message: "Username and password is not matched!",
-              });
+              return done(null, false, {message: "Username and password is not matched!"});
             }
 
             if (!user.isVerify) {
               return done(null, false, { message: "User email not verified" });
             }
 
-                bcrypt.compare(password, user.password, (err, isMatch) => {
-                    if(err) throw err;
+            bcrypt.compare(password, user.password, (err, isMatch) => {
+                if(err) throw err;
 
-                    if(isMatch){
-                        if (!user.isVerify) {
-                            return done(null, false, { message: "Please active your account with registed email!" });
-                        }
-                        return done(null, user, {message: "Login successfully"});
-                    } else {
-                        return done(null, false, {message: 'Username and password is not matched!'});
+                if(isMatch){
+                    if (!user.isVerify) {
+                        return done(null, false, { message: "Please active your account with registed email!" });
                     }
-                });
-              }
+                    return done(null, user, {message: "Login successfully"});
+                } else {
+                    return done(null, false, {message: 'Username and password is not matched!'});
+                }
             });
           })
           .catch((err) => console.log(err));
-      }
-    )
+    })
   );
 
   passport.use(

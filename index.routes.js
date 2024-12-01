@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+
 router.get('/', (req, res) => {
     res.render('home', {
         currentView: 'home',
@@ -33,6 +34,19 @@ router.get('/products', (req, res) => {
         profileImg: req.user?.picture,
     })
 })
+
+
+router.get('/admin', (req, res) => {
+    res.render('admin', {
+        currentView: 'admin',
+        name: req.user?.username,
+        profileImg: req.user?.picture,
+    })
+})
+
+
+
+
 
 
 module.exports = router;
