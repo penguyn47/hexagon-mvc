@@ -26,13 +26,4 @@ router.get('/contact', (req, res) => {
     })
 })
 
-router.get('/products', (req, res) => {
-    res.render('products', {
-        currentView: 'products',
-        name: req.user?.username,
-        profileImg: req.user?.picture,
-    })
-})
-
-
 module.exports = router;
