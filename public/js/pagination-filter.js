@@ -211,5 +211,15 @@ const fetchProducts = async (filters = {}) => {
     }
 };
 
+const __url = new URL(window.location.href);
+const __params = new URLSearchParams(__url.search);
+
+const __paramsObject = {pageSize: 9};
+__params.forEach((value, key) => {
+  __paramsObject[key] = value;
+});
+
+console.log(__paramsObject);
+
 // Fetch products on page load
-fetchProducts({pageSize: 9});
+fetchProducts(__paramsObject);
