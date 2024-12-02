@@ -69,10 +69,6 @@ module.exports = function (passport) {
               firstName: profile.name.givenName,
               lastName: profile.name.familyName,
               url: profile.photos[0].value,
-              //   Lỗi hiển thị hình
-              //   url:
-              //     profile.photos[0].value ||
-              //     "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Image.png",
             };
 
             const createdUser = await userService.createUserEmail({

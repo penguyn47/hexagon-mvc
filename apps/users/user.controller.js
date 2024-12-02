@@ -1,7 +1,6 @@
 const userService = require("./user.service");
 const passport = require("passport");
 
-
 const userController = {
   // Tạo người dùng mới
   async createUser(req, res) {
@@ -164,14 +163,14 @@ const userController = {
         return next(err);
       }
       if (!user) {
-        return res.status(401).json({message: info.message });
+        return res.status(401).json({ message: info.message });
       }
       req.logIn(user, (err) => {
         if (err) {
           return next(err);
         }
         // Đăng nhập thành công
-        return res.status(200).json({message: info.message });
+        return res.status(200).json({ message: info.message });
       });
     })(req, res, next);
   },
@@ -235,7 +234,7 @@ const userController = {
     try {
       const { gmail } = req.body;
       await userService.forgotPassword(gmail);
-      res.redirect("/users/reset-password")
+      res.redirect("/users/reset-password");
     } catch (err) {
       res.status(500).send("Error sending password reset link");
     }
@@ -244,18 +243,19 @@ const userController = {
   // Đặt lại mật khẩu
   async resetPassword(req, res) {
     try {
-      const { token, password } = req.body;      
+      const { token, password } = req.body;
       const user = await userService.resetPassword(token, password);
       res.status(200).json({ message: user.message }); // Trả về JSON khi thành công
     } catch (err) {
-      res.status(400).json({ message: "Invalid token or error resetting password" }); // Đảm bảo JSON khi có lỗi
+      res
+        .status(400)
+        .json({ message: "Invalid token or error resetting password" }); // Đảm bảo JSON khi có lỗi
     }
   },
   // Render trang cá nhân
   async renderProfile(req, res) {
     res.send("PROFILE PAGE");
   },
-
 };
 
 module.exports = userController;
