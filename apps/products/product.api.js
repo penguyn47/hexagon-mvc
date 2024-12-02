@@ -3,9 +3,8 @@ const router = express.Router();
 
 const productController = require('./product.controller');
 
-router.get('/', productController.renderMultiProductPage);
+router.get('/:id', productController.getProductById);
 
-router.get('/:id', productController.renderSingleProductPage);
-
+router.get('/', productController.getProducts);
 
 module.exports = router;

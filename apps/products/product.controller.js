@@ -104,7 +104,15 @@ const productController = {
         } catch (error) {
             res.status(404).json({ message: error.message }); // Nếu không tìm thấy, trả về 404
         }
-    }
+    },
+
+    async renderMultiProductPage (req, res)  {
+        res.render('products', {
+            currentView: 'products',
+            name: req.user?.username,
+            profileImg: req.user?.picture,
+        })
+    },
 };
 
 module.exports = productController;

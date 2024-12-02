@@ -67,9 +67,12 @@ hbs.registerHelper("times", hbs_helpers.times);
 app.use(express.static(path.join(__dirname, "public")));
 
 // Định nghĩa các routes
-app.use("/", require("./index.routes"));
+app.use("/", require("./apps/dashboard/index.routes"));
 app.use("/users", require("./apps/users/user.routes"));
 app.use("/products", require("./apps/products/product.routes"));
+
+// APIs
+app.use("/api/products", require("./apps/products/product.api"));
 
 // Kết nối database
 const connectDB = async () => {
