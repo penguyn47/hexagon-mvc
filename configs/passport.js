@@ -84,13 +84,16 @@ module.exports = function (passport) {
 
   passport.serializeUser(function (user, done) {
     process.nextTick(function () {
-      return done(null, {
-        id: user.id,
-        username: user.username,
-        picture: user.url,
-      });
+        return done(null, {
+            id: user.id,
+            username: user.username,
+            picture: user.url,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName
+        });
     });
-  });
+});
 
   // passport.deserializeUser((id, done) => {
   //     userController.getUserById(id, (err, user) => {

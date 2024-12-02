@@ -65,14 +65,25 @@ const userController = {
         console.log(req.body);
         try {
             const userId = req.user.id; // Get user ID from authenticated session
-            const { username, email, password, firstName, lastName, profileImg } = req.body;
+            const { username, email, oldPassword, newPassword, firstName, lastName, profileImg } = req.body;
 
             // Fetch the current user data
             const currentUser = await userService.getUserById(userId);
 
+            // Check if the old password matches the current password
+            if (!await userService.validatePassword(oldPassword, currentUser.password)) {
+                return res.status(400).json({ message: 'Incorrect password' });
+            }
+            // Check if the new password is different from the old password
+            if (oldPassword === newPassword) {
+                return res.status(400).json({ message: 'New password must be different from the old password' });
+            }
+
+
             
             url = profileImg;
             // Prepare the update data
+            password = newPassword;
             const updateData = { username, email, password, firstName, lastName, url };
 
             // Handle profile image upload if necessary
@@ -143,9 +154,21 @@ const userController = {
 
     // Đăng nhập người dùng
     async loginUser(req, res, next) {
-        passport.authenticate('local', {
-            successRedirect: '/',
-        })(req, res, next);
+        passport.authenticate("local", (err, user, info) => {
+            if (err) {
+              return next(err);
+            }
+            if (!user) {
+              return res.status(401).json({message: info.message });
+            }
+            req.logIn(user, (err) => {
+              if (err) {
+                return next(err);
+              }
+              // Đăng nhập thành công
+              return res.status(200).json({message: info.message });
+            });
+          })(req, res, next);
     },
 
     async logoutUser(req, res) {
