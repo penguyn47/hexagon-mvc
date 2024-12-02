@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {ensureAuthenticated} = require("../../configs/auth");
+const { ensureAuthenticated } = require("../../configs/auth");
 
 const userController = require("./user.controller");
 
@@ -24,6 +24,6 @@ router.post("/reset-password", userController.resetPassword);
 router.get("/login/auth/google", userController.loginWithGoogle);
 router.get("/login/auth/google/callback", userController.callbackGoogle);
 
-router.get("/profile",ensureAuthenticated, userController.renderProfile);
+router.get("/profile", ensureAuthenticated, userController.renderProfile);
 
 module.exports = router;
