@@ -59,7 +59,7 @@ async function updateCartDisplay() {
 
     cartList.innerHTML = `<div class="cart-footer">
                             <span>Quick Cart</span>
-                            <button onclick="proceedToOrder()">Details</button>
+                            <button onclick="navigateToDetailsCart()">Details</button>
                         </div>
                         <hr>`;
 
@@ -71,36 +71,40 @@ async function updateCartDisplay() {
         cartItemCount.innerHTML = cart.length;
     }
 
+    // Use a variable to accumulate all the cart items first
+    let cartItemsHTML = '';
+    
     for (const { id: productId, quantity } of cart) {
         try {
             const response = await fetch(`/api/products/${productId}`);
             const product = await response.json();
 
-            const cartItem = document.createElement("div");
-            cartItem.classList.add("cart-item");
-
-            cartItem.innerHTML = `
-                <img src="${product.url}" alt="${product.productName}">
-                <div class="item-details">
-                    <p>${product.productName}</p>
-                    <span class="stock-info">(Stock: ${product.stock_quanity})</span>
-                </div>
-                <div class="item-actions">
-                    <div class="quantity-control">
-                        <button onclick="decreaseQuantity(${productId})">-</button>
-                        <div id="product-${productId}-count">${quantity}</div>
-                        <button onclick="increaseQuantity(${productId})">+</button>
+            cartItemsHTML += `
+                <div class="cart-item">
+                    <img src="${product.url}" alt="${product.productName}">
+                    <div class="item-details">
+                        <p>${product.productName}</p>
+                        <span class="stock-info">(Stock: ${product.stock_quanity})</span>
                     </div>
-                    <button class="delete-btn" onclick="removeFromCart(this,${productId})">X</button>
+                    <div class="item-actions">
+                        <div class="quantity-control">
+                            <button onclick="decreaseQuantity(${productId})">-</button>
+                            <div id="product-${productId}-count">${quantity}</div>
+                            <button onclick="increaseQuantity(${productId})">+</button>
+                        </div>
+                        <button class="delete-btn" onclick="removeFromCart(this,${productId})">X</button>
+                    </div>
                 </div>
             `;
-
-            cartList.appendChild(cartItem);
         } catch (error) {
             console.error(`Failed to fetch product with ID ${productId}:`, error);
         }
     }
+
+    // After all items are processed, update the cart list in one go
+    cartList.innerHTML += cartItemsHTML;
 }
+
 
 function addToCart(productId, number=1) {
     // Lấy giỏ hàng từ localStorage
@@ -148,6 +152,10 @@ function toggleCartList() {
         // Xóa sự kiện nếu giỏ hàng đã ẩn
         document.removeEventListener("click", hideCartOnClickOutside);
     }
+}
+
+function navigateToDetailsCart() {
+    window.location.href = '/cart';
 }
 
 
