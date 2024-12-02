@@ -170,9 +170,7 @@ const userService = {
       if (!user) {
         return { message: "User not found" };
       }
-      if (!user.isVerify) {
-        return { error: "User account is not verify." };
-      }
+
       const token = await bcrypt.genSalt(10);
       user.resetPasswordToken = token;
       user.resetPasswordExpires = Date.now() + 900000; // 15 minutes
@@ -187,6 +185,7 @@ const userService = {
 
   async resetPassword(token, newPassword) {
     try {
+      console.log(token);
       const user = await User.findOne({
         where: {
           resetPasswordToken: token,
