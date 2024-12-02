@@ -22,8 +22,8 @@ const sequelize = new Sequelize(
     dialectOptions: {
       // ssl: {
       //   require: true,
-      //   rejectUnauthorized: false // Đặt `false` nếu chứng chỉ không được xác thực
-      // }
+      //   rejectUnauthorized: false, // Đặt `false` nếu chứng chỉ không được xác thực
+      // },
       ssl: false,
     },
   }
