@@ -51,7 +51,6 @@ router.post('/profileImg', uploadPhoto.array('profileImg', 1), resizeAndUploadIm
     if (!req.imageUrl) {
         return res.status(400).json({ message: 'No file uploaded' });
     }
-    console.log(req.file);
     res.json({ message: 'Upload success', imageUrl: req.imageUrl });
 });
 
