@@ -19,6 +19,7 @@
                             <li class="scroll-to-section"><a href="/users/profile" {{#if (eq currentView "login" )}} class="active"{{/if}}>
                             <img src="{{profileImg}}" alt="Login Icon" style="width: 40px; height: 40px; margin-right: 5px; border-radius:50%;object-fit: cover;object-position: center;">
                             {{name}}</a></li>
+                            <li class="scroll-to-section"><a href="/orders" {{#if (eq currentView "orders" )}} class="active"{{/if}}>Your Orders</a></li>
                             <li class="scroll-to-section"><a href="/users/logout" {{#if (eq currentView "login" )}} class="active"{{/if}}><i class="fas fa-sign-in-alt"></i>  Logout</a></li> 
                             
                         {{else}}
