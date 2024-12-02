@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { ensureAuthenticated } = require('../../configs/auth');
 
 const userController = require('./user.controller');
 
@@ -12,17 +13,7 @@ router.post('/login', userController.loginUser);
 router.get('/logout', userController.logoutUser);
 
 
-// Middleware kiểm tra đăng nhập
-function ensureAuthenticated(req, res, next) {
-    if (req.isAuthenticated && req.isAuthenticated()) {
-        // Người dùng đã đăng nhập
-        return next();
-    }
-    // Người dùng chưa đăng nhập, chuyển hướng đến login
-    res.redirect('/users/login');
-}
-
-// Route profile, thêm middleware ensureAuthenticated
+// Route profile
 router.get('/profile', ensureAuthenticated, (req, res) => {
     res.render('profile', {
         currentView: 'profile',

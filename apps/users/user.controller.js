@@ -1,4 +1,5 @@
 const userService = require('./user.service');
+const axios = require('axios');
 const passport = require('passport');
 
 const userController = {
@@ -62,7 +63,6 @@ const userController = {
 
     // Cập nhật mật khẩu
     async changePassword(req, res) {
-        console.log(req.body);
         try {
             const userId = req.user.id; // Get user ID from authenticated session
             const { oldPassword, newPassword } = req.body;
@@ -84,7 +84,6 @@ const userController = {
             const updateData = { password };
 
            
-            console.log(updateData);
 
             // Update the user information
             const updatedUser = await userService.updateUser(userId, updateData);
@@ -118,30 +117,36 @@ const userController = {
 
     // Cập nhật thông tin người dùng
     async updateUser(req, res) {
-        console.log(req.body);
         try {
             const userId = req.user.id; // Get user ID from authenticated session
-            const { username, email, firstName, lastName, profileImg } = req.body;
+            const { username, email, firstName, lastName, profileImgUrl } = req.body;
 
             // Fetch the current user data
             const currentUser = await userService.getUserById(userId);
+            let imageUrl = currentUser.url;
 
+            if (profileImgUrl) {
+                imageUrl = profileImgUrl; // Set the imageUrl from the request body
+            }
 
-
-            
-            url = profileImg;
             // Prepare the update data
-            const updateData = { username, email, firstName, lastName, url };
-            console.log(updateData);
+            const updateData = {
+                username,
+                email,
+                firstName,
+                lastName,
+                url: imageUrl
+            };
 
-            // Update the user information
+
+            // Update the user
             const updatedUser = await userService.updateUser(userId, updateData);
 
-            // Re-authenticate the user to update the session
-            req.logIn(updatedUser, function(err) {
+            // Update the user session
+            req.login(updatedUser, (err) => {
                 if (err) {
-                    console.error('Error re-authenticating user:', err);
-                    return res.status(500).json({ message: 'Server error' });
+                    console.error('Error updating session:', err);
+                    return res.status(500).json({ errorMessage: 'Server error' });
                 }
 
                 // Return the updated user information
@@ -153,11 +158,10 @@ const userController = {
                         email: updatedUser.email,
                         firstName: updatedUser.firstName,
                         lastName: updatedUser.lastName,
-                        profileImg: updatedUser.profileImg,
+                        profileImg: updatedUser.url,
                     }
                 });
             });
-
         } catch (error) {
             console.error('Error updating user:', error);
             return res.status(500).json({ errorMessage: 'Server error' });

@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { uploadPhoto, resizeAndUploadImage } = require('./middlewares/imageUploadMiddleware');
 
 
 router.get('/', (req, res) => {
@@ -43,6 +44,17 @@ router.get('/admin', (req, res) => {
         profileImg: req.user?.picture,
     })
 })
+
+
+
+router.post('/profileImg', uploadPhoto.array('profileImg', 1), resizeAndUploadImage, (req, res) => {
+    if (!req.imageUrl) {
+        return res.status(400).json({ message: 'No file uploaded' });
+    }
+    console.log(req.file);
+    res.json({ message: 'Upload success', imageUrl: req.imageUrl });
+});
+
 
 
 

@@ -5,7 +5,7 @@ const cancelPasswordButton = document.getElementById('cancel-password-button');
 const profileForm = document.getElementById('profile-form');
 const passwordForm = document.getElementById('password-form');
 const inputs = document.querySelectorAll('#profile-form input');
-const profileImgInput = document.getElementById('profileImg');
+const profileImgInput = document.getElementById('profileImgInput');
 const profileImgPreview = document.getElementById('profileImgPreview');
 
 const errorMessageDiv = document.querySelector('.alert-danger');
@@ -32,14 +32,12 @@ editButton.addEventListener('click', () => {
             input.removeAttribute('readonly');
         }
     });
+    profileImgInput.style.display = 'block';
     updateButton.style.display = 'block';
     editButton.style.display = 'none';
 });
 
-// Preview profile image
-profileImgInput.addEventListener('input', () => {
-    profileImgPreview.src = profileImgInput.value;
-});
+
 
 // Show password form
 changePasswordButton.addEventListener('click', () => {
@@ -85,12 +83,44 @@ function validatePasswordForm(formObject) {
     return true;
 }
 
+function previewImage(event) {
+    const reader = new FileReader();
+    reader.onload = function() {
+        const output = document.getElementById('profileImgPreview');
+        output.src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+}
+
 // Handle profile form submission
 profileForm.addEventListener('submit', async function (e) {
     e.preventDefault();
 
     const formData = new FormData(profileForm);
+    const profileImgFile = formData.get('profileImg');
+
+
+    if (profileImgFile && profileImgFile.size > 0) {
+        // Upload the image first
+        const imageUploadFormData = new FormData();
+        imageUploadFormData.append('profileImg', profileImgFile);
+
+        const imageUploadResponse = await fetch('/profileImg', {
+            method: 'POST',
+            body: imageUploadFormData
+        });
+
+        const imageUploadData = await imageUploadResponse.json();
+
+        if (imageUploadData.message !== 'Upload success') {
+            showError('Error uploading image');
+            return;
+        }
+
+        formData.append('profileImgUrl', imageUploadData.imageUrl);
+    }
     const formObject = Object.fromEntries(formData.entries());
+
 
     if (!validateProfileForm(formObject)) return;
 
