@@ -27,16 +27,14 @@ module.exports = function (passport) {
 
                     if(isMatch){
                         if (!user.isVerify) {
-                            return done(null, false, { message: "Please active your account with registed email!" });
+                            return done(null, false, { message: "Please activate your account with registered email!" });
                         }
                         return done(null, user, {message: "Login successfully"});
                     } else {
                         return done(null, false, {message: 'Username and password is not matched!'});
                     }
                 });
-              }
-            });
-          })
+            })
           .catch((err) => console.log(err));
       }
     )
