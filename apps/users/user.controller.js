@@ -60,17 +60,18 @@ const userController = {
         }
     },
 
-    // Cập nhật thông tin người dùng
-    async updateUser(req, res) {
+    // Cập nhật mật khẩu
+    async changePassword(req, res) {
         console.log(req.body);
         try {
             const userId = req.user.id; // Get user ID from authenticated session
-            const { username, email, oldPassword, newPassword, firstName, lastName, profileImg } = req.body;
+            const { oldPassword, newPassword } = req.body;
 
             // Fetch the current user data
             const currentUser = await userService.getUserById(userId);
 
             // Check if the old password matches the current password
+            
             if (!await userService.validatePassword(oldPassword, currentUser.password)) {
                 return res.status(400).json({ message: 'Incorrect password' });
             }
@@ -78,20 +79,11 @@ const userController = {
             if (oldPassword === newPassword) {
                 return res.status(400).json({ message: 'New password must be different from the old password' });
             }
-
-
             
-            url = profileImg;
-            // Prepare the update data
             password = newPassword;
-            const updateData = { username, email, password, firstName, lastName, url };
+            const updateData = { password };
 
-            // Handle profile image upload if necessary
-            // if (req.profileImg) {
-            //     updateData.profileImg = req.profileImg.path; // Assuming you are using multer for file uploads
-            // } else {
-            //     updateData.profileImg = currentUser.profileImg; // Retain the existing profile image URL
-            // }
+           
             console.log(updateData);
 
             // Update the user information
@@ -106,7 +98,7 @@ const userController = {
 
                 // Return the updated user information
                 return res.status(200).json({
-                    message: 'User updated successfully',
+                    successMessage: 'User updated successfully',
                     user: {
                         id: updatedUser.id,
                         username: updatedUser.username,
@@ -120,7 +112,55 @@ const userController = {
 
         } catch (error) {
             console.error('Error updating user:', error);
-            return res.status(500).json({ message: 'Server error' });
+            return res.status(500).json({ errorMessage: 'Server error' });
+        }
+    },
+
+    // Cập nhật thông tin người dùng
+    async updateUser(req, res) {
+        console.log(req.body);
+        try {
+            const userId = req.user.id; // Get user ID from authenticated session
+            const { username, email, firstName, lastName, profileImg } = req.body;
+
+            // Fetch the current user data
+            const currentUser = await userService.getUserById(userId);
+
+
+
+            
+            url = profileImg;
+            // Prepare the update data
+            const updateData = { username, email, firstName, lastName, url };
+            console.log(updateData);
+
+            // Update the user information
+            const updatedUser = await userService.updateUser(userId, updateData);
+
+            // Re-authenticate the user to update the session
+            req.logIn(updatedUser, function(err) {
+                if (err) {
+                    console.error('Error re-authenticating user:', err);
+                    return res.status(500).json({ message: 'Server error' });
+                }
+
+                // Return the updated user information
+                return res.status(200).json({
+                    successMessage: 'User updated successfully',
+                    user: {
+                        id: updatedUser.id,
+                        username: updatedUser.username,
+                        email: updatedUser.email,
+                        firstName: updatedUser.firstName,
+                        lastName: updatedUser.lastName,
+                        profileImg: updatedUser.profileImg,
+                    }
+                });
+            });
+
+        } catch (error) {
+            console.error('Error updating user:', error);
+            return res.status(500).json({ errorMessage: 'Server error' });
         }
     },
 

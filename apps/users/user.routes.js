@@ -36,6 +36,7 @@ router.get('/profile', ensureAuthenticated, (req, res) => {
 
 // Route update profile
 router.put('/profile', ensureAuthenticated, userController.updateUser);
+router.put('/profile/password', ensureAuthenticated, userController.changePassword);
 
 
 
