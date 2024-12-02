@@ -10,6 +10,8 @@ const passport = require('passport');
 const cors = require('cors');
 const flash = require('connect-flash');
 
+const { Product, User, Review } = require('./apps/relationships');
+
 const app = express();
 
 // Để sử dụng biến môi trường trong file .env
@@ -79,7 +81,7 @@ const connectDB = async () => {
     try {
         await db.authenticate();
         // Đồng bộ các models
-        await db.sync({ force: false });
+        await db.sync({ force: true });
         console.log('Database connection established');
     } catch (e) {
         console.log('Database connection failed', e);
