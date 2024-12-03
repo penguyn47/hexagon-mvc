@@ -1,20 +1,38 @@
-const bcrypt = require('bcrypt');
-const User = require('./user.model');
-const { Op } = require('sequelize');
+const bcrypt = require("bcrypt");
+const User = require("./user.model");
+const { Op } = require("sequelize");
+const emailHelper = require("../../helpers/emailService.helper");
 
 const userService = {
 
     // Tạo người dùng mới
     async createUser(userData) {
         try {
-            const hashedPassword = await bcrypt.hash(userData.password, 10); // Mã hóa mật khẩu
-            const newUser = await User.create({
-                ...userData,
-                password: hashedPassword, // Lưu mật khẩu đã mã hóa
-            });
-            return newUser;
+        const hashedPassword = await bcrypt.hash(userData.password, 10); // Mã hóa mật khẩu
+        const verificationToken = await bcrypt.genSalt(10);
+        const newUser = await User.create({
+            ...userData,
+            verificationToken: verificationToken,
+            password: hashedPassword, // Lưu mật khẩu đã mã hóa
+        });
+        emailHelper.sendVerificationEmail(newUser.email, verificationToken);
+        return newUser;
         } catch (error) {
-            throw new Error('Error creating user: ' + error.message);
+        throw new Error("Error creating user: " + error.message);
+        }
+    },
+    // Tạo người dùng từ thông tin lấy từ email
+    async createUserEmail(userData) {
+        try {
+        const randomPassword = Math.random().toString(36).slice(-8); // Tạo mật khẩu ngẫu nhiên
+        const hashedPassword = await bcrypt.hash(randomPassword, 10); // Mã hóa mật khẩu
+        const newUser = await User.create({
+            ...userData,
+            password: hashedPassword, // Lưu mật khẩu đã mã hóa
+        });
+        return newUser;
+        } catch (error) {
+        throw new Error("Error creating user: " + error.message);
         }
     },
 
@@ -119,8 +137,29 @@ const userService = {
         } catch (error) {
             throw new Error('Error validating password: ' + error.message);
         }
-    }
-  },
+    },
+
+    // Xác minh tài khoản
+    async verifyAccount(token) {
+        try {
+        // Tìm người dùng
+        const user = await User.findOne({ where: { verificationToken: token } });
+        if (!user) {
+            return { error: "Invalid or expired token." };
+        }
+        if (user.isDeleted) {
+            return { error: "User account is deleted." };
+        }
+        // Cập nhật trạng thái xác minh
+        user.isVerify = true;
+        user.verificationToken = null; // Xóa token sau khi xác minh
+        await user.save();
+
+        return { message: "Email verification successful!" };
+        } catch (err) {
+        return { error: err.message };
+        }
+    },
 
   async forgotPassword(email) {
     try {

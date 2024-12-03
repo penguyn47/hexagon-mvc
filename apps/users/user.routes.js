@@ -12,6 +12,8 @@ router.post('/login', userController.loginUser);
 
 router.get('/logout', userController.logoutUser);
 
+router.get("/verify", userController.verifyAccount);
+
 // Route profile
 router.get('/profile', ensureAuthenticated, (req, res) => {
     res.render('profile', {
