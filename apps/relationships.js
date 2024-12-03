@@ -44,6 +44,14 @@ Cart.belongsTo(User, {
 Cart.hasMany(CartItem, { foreignKey: 'cartId' });
 CartItem.belongsTo(Cart, { foreignKey: 'cartId' });
 
+// Mối quan hệ giữa CartItem và Product
+CartItem.belongsTo(Product, {
+  foreignKey: 'productId',
+  onDelete: 'CASCADE', // Khi xóa Product thì xóa luôn CartItem liên quan
+});
+Product.hasMany(CartItem, {
+  foreignKey: 'productId',
+});
 
 // Mối quan hệ giữa User và Order
 User.hasMany(Order, { foreignKey: 'userId' });

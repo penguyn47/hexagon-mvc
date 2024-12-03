@@ -21,7 +21,7 @@ async function renderCartItems() {
     if(cart.length == 0){
         cartItemsArea.innerHTML = `<h1>No products.</h1>
                                     <hr>
-                                    <a href="/">Go back to home</a>`
+                                    <a href="/">Go back to home</a>`;
     }
     
     // Duyệt qua từng item trong giỏ hàng
@@ -54,7 +54,7 @@ async function renderCartItems() {
                 <div class="col-4">
                     <div class="quantity-box">
                         <button class="product-quantity__btn-minus">-</button>
-                        <input type="text" inputmode="numeric" pattern="^[1-9][0-9]*$" class="no-spinners" value="${quantity}">
+                        <input type="text" readonly inputmode="numeric" pattern="^[1-9][0-9]*$" class="no-spinners" value="${quantity}">
                         <button class="product-quantity__btn-plus">+</button>
                     </div>
                 </div>
@@ -108,6 +108,7 @@ function updateCart() {
         const productId = parseInt(input.closest('.cart-item').querySelector('.cart-remove').dataset.id, 10);
         const quantity = parseInt(input.value, 10);
         cartItems.push({ id: productId, quantity });
+        if (syncCartUpdate) syncCartUpdate(productId, quantity);
     });
     localStorage.setItem('cart', JSON.stringify(cartItems));
 }
@@ -121,6 +122,7 @@ async function removeFromCart(productId) {
     await renderCartItems();
     handleCartActions();
     updateTotal();
+    if (syncCartRemove) syncCartRemove(productId);
     showAlert("success", "Removed product from cart!");
 }
 
@@ -158,3 +160,85 @@ async function updateTotal() {
     await handleCartActions();
     updateTotal();
 }) ();
+
+
+document.getElementById('checkoutButton').addEventListener('click', async () => {
+    // Lấy thông tin địa chỉ giao hàng
+    const shippingAddress = document.querySelector('textarea').value.trim();
+
+    // Lấy phương thức thanh toán được chọn
+    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.id;
+
+    // Kiểm tra dữ liệu đầu vào
+    if (!shippingAddress) {
+        showAlert("danger","Please type in shipping address");
+        return;
+    }
+    if (!paymentMethod) {
+        showAlert("danger","Please choose your payment method");
+        return;
+    }
+
+    // Lấy giỏ hàng từ localStorage
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    if (cart.length === 0) {
+        alert('Giỏ hàng của bạn đang trống.');
+        return;
+    }
+
+    try {
+        // Lấy thông tin sản phẩm và chuẩn bị orderItems
+        const orderItems = [];
+        let totalCost = 0;
+
+        for (const item of cart) {
+            // Gọi API để lấy thông tin sản phẩm từ ID
+            const response = await fetch(`/api/products/${item.id}`);
+            if (!response.ok) throw new Error('Không thể lấy thông tin sản phẩm');
+            const product = await response.json();
+
+            // Tính giá trị của sản phẩm và thêm vào orderItems
+            const productCost = product.price * item.quantity;
+            totalCost += productCost;
+
+            orderItems.push({
+                productId: item.id,
+                quantity: item.quantity,
+                priceAtPurchase: product.price,
+            });
+        }
+
+        // Chuẩn bị dữ liệu đơn hàng
+        const orderData = {
+            paymentMethod: paymentMethod,
+            shippingAddress: shippingAddress,
+            orderStatus: 'pending',
+            totalCost: totalCost,
+        };
+
+        // Gửi yêu cầu tạo đơn hàng đến API
+        const response = await fetch('/api/orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ orderData, orderItems }),
+        });
+
+        if (!response.ok) throw new Error('Không thể tạo đơn hàng');
+
+        const order = await response.json();
+
+        // Hiển thị thông báo và xóa giỏ hàng
+        alert('Đơn hàng của bạn đã được tạo thành công!');
+        localStorage.removeItem('cart');
+
+        await fetch("/api/cart/clear", {method: "DELETE"});
+
+        // Chuyển hướng nếu cần
+        window.location.href = '/';
+    } catch (error) {
+        console.error('Lỗi khi xử lý thanh toán:', error);
+        alert('Có lỗi xảy ra khi xử lý đơn hàng. Vui lòng thử lại.');
+    }
+});

@@ -134,9 +134,13 @@ const userController = {
 
   // Render trang account - login
   async renderLoginPage(req, res) {
-    res.render("login", {
-      currentView: "login",
-    });
+    if(req.isAuthenticated()){
+      res.redirect("/");
+    } else {
+      res.render("login", {
+        currentView: "login",
+      });
+    }
   },
 
   // Trang ForgotPassword

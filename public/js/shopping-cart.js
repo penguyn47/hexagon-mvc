@@ -20,6 +20,8 @@ function removeFromCart(button, productId) {
     } else {
         cartItemCount.innerHTML = cart.length;
     }
+
+    if (syncCartRemove) syncCartRemove(productId);
 }
 
 function getProductQuantity(productId) {
@@ -38,6 +40,8 @@ function increaseQuantity(productId, number = 1) {
         localStorage.setItem("cart", JSON.stringify(cart));
         const cartList = document.getElementById("cart-list");
         cartList.style.display = "block";
+
+        if (syncCartAdd) syncCartRemove(productId, number);
     }
 }
 
@@ -48,6 +52,7 @@ function decreaseQuantity(productId) {
         product.quantity--;
         document.getElementById(`product-${productId}-count`).innerHTML = product.quantity;
         localStorage.setItem("cart", JSON.stringify(cart));
+        if(syncCartUpdate) syncCartUpdate(productId, product.quantity);
     }
 }
 
@@ -96,6 +101,7 @@ async function updateCartDisplay() {
                     </div>
                 </div>
             `;
+
         } catch (error) {
             console.error(`Failed to fetch product with ID ${productId}:`, error);
         }
@@ -124,6 +130,8 @@ function addToCart(productId, number=1) {
         // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng theo số lượng mới
         increaseQuantity(productId, number);
     }
+
+    if (syncCartAdd) syncCartAdd(productId, number);
 }
 
 

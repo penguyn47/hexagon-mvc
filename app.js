@@ -70,9 +70,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', require('./apps/dashboard/index.routes'));
 app.use('/users', require('./apps/users/user.routes'));
 app.use('/products', require('./apps/products/product.routes'));
+app.use('/cart', require('./apps/carts/cart.routes'));
+
 
 // APIs
 app.use('/api/products', require('./apps/products/product.api'));
+app.use('/api/cart', require('./apps/carts/cart.api'));
+app.use('/api/orders', require('./apps/orders/order.api'));
 
 // Kết nối database
 const connectDB = async () => {

@@ -42,6 +42,63 @@ document.getElementById("login-form").addEventListener("submit", async function 
             showAlert("danger", resData.message);
         } else {
             showAlert("success", resData.message + "\nRedirecting...");
+
+            // Lấy dữ liệu giỏ hàng từ localStorage
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            // Gửi từng sản phẩm trong giỏ hàng lên server
+            const addItemsToCart = async () => {
+                try {
+                    for (const item of cart) {
+                        const response = await fetch("/api/cart/add", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                productId: item.id,
+                                quantity: item.quantity,
+                            }),
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(`Failed to add item with productId ${item.productId}`);
+                        }
+
+                        const data = await response.json();
+                        console.log(`Added product ${item.productId} to cart:`, data);
+                    }
+                } catch (error) {
+                    console.error("Error adding items to cart:", error);
+                }
+            };
+
+            // Gọi hàm thêm sản phẩm vào giỏ hàng
+            await addItemsToCart();
+            fetch("/api/cart", {
+                method: "GET",
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to fetch cart items.");
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Chuyển đổi data thành mảng các đối tượng { productId, quantity }
+                const cartItems = data.map(item => ({
+                    id: item.productId,
+                    quantity: item.quantity,
+                }));
+        
+                // Lưu cartItems vào localStorage
+                localStorage.setItem("cart", JSON.stringify(cartItems));
+            })
+            .catch(error => {
+                console.error("Error fetching cart items:", error);
+            });
+            
+
             setTimeout(() => {
                 window.location.href = "/";
             }, 3000);

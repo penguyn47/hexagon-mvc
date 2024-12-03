@@ -17,7 +17,6 @@ const Cart = db.define('cart', {
   },
 }, {
   timestamps: true, // Thêm createdAt và updatedAt
-  tableName: 'carts', // Tên bảng trong cơ sở dữ liệu
 });
 
 module.exports = Cart;

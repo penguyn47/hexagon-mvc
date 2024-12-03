@@ -17,15 +17,6 @@ router.get('/about', (req, res) => {
     })
 })
 
-router.get('/cart', (req, res) => {
-    res.render('cart', {
-        currentView: '',
-        cart: true,
-        name: req.user?.username,
-        profileImg: req.user?.picture,
-    })
-})
-
 router.get('/contact', (req, res) => {
     res.render('contact', {
         currentView: 'contact',

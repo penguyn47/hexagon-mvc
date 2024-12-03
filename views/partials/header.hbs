@@ -1,3 +1,9 @@
+<script>
+    let syncCartAdd = null;
+    let syncCartRemove = null;
+    let syncCartUpdate = null;
+</script>
+
 <!-- ***** Header Area Start ***** -->
 <header class="header-area header-sticky">
     <div class="container">
@@ -57,5 +63,10 @@
     </button>
 </div>
 <script src="/js/shopping-cart.js"></script>
+
+{{/if}}
+
+{{#if name}}
+<script src="/js/sync-cart.js"></script>
 {{/if}}
 
