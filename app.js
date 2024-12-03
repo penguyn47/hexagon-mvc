@@ -10,6 +10,8 @@ const passport = require("passport");
 const cors = require("cors");
 const flash = require("connect-flash");
 
+const { Product, User, Review } = require('./apps/relationships');
+
 const app = express();
 
 // Để sử dụng biến môi trường trong file .env

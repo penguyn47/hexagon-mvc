@@ -29,10 +29,6 @@ Product
 - url           --thumbnail
 - urls          --pictures
 
-ProductRelated
-- product_id_1 (PK)
-- product_id_2 (PK)
-
 ProductReview
 - review_id (PF)
 - product_id (FK)

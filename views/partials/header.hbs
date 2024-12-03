@@ -41,6 +41,9 @@
 <!-- ***** Header Area End ***** -->
 
 <!-- Fixed Cart Button -->
+{{#if cart}}
+
+{{else}}
 <div class="cart-container">
   <!-- Cart List -->
   <div id="cart-list" class="cart-list">
@@ -53,5 +56,6 @@
       <span id="cart-number-items" class="badge bg-danger" style="font-size: 15px;">3</span>
     </button>
 </div>
-
 <script src="/js/shopping-cart.js"></script>
+{{/if}}
+
