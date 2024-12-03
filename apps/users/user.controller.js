@@ -1,10 +1,9 @@
-const userService = require('./user.service');
-const axios = require('axios');
-const passport = require('passport');
+const userService = require("./user.service");
+const passport = require("passport");
+
 
 const userController = {
-
-    // Tạo người dùng mới
+  // Tạo người dùng mới
     async createUser(req, res) {
         try {
             // Lấy dữ liệu từ request body
@@ -40,28 +39,27 @@ const userController = {
         }
     },
 
-    // Lấy người dùng theo ID
-    async getUserById(req, res) {
-        try {
-            const userId = req.params.id;
+  // Lấy người dùng theo ID
+  async getUserById(req, res) {
+    try {
+      const userId = req.params.id;
 
-            const user = await userService.getUserById(userId);
-            return res.status(200).json({
-                id: user.id,
-                username: user.username,
-                email: user.email,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                url: user.url,
-            });
-
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ message: 'Server error' });
-        }
-    },
-
-    // Cập nhật mật khẩu
+      const user = await userService.getUserById(userId);
+      return res.status(200).json({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        url: user.url,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Server error" });
+    }
+  },
+  
+  // Cập nhật mật khẩu
     async changePassword(req, res) {
         try {
             const userId = req.user.id; // Get user ID from authenticated session
@@ -115,7 +113,7 @@ const userController = {
         }
     },
 
-    // Cập nhật thông tin người dùng
+  // Cập nhật thông tin người dùng
     async updateUser(req, res) {
         try {
             const userId = req.user.id; // Get user ID from authenticated session
@@ -168,59 +166,150 @@ const userController = {
         }
     },
 
-    // Xóa người dùng
-    async deleteUser(req, res) {
-        try {
-            const userId = req.params.id;
+  // Xóa người dùng
+  async deleteUser(req, res) {
+    try {
+      const userId = req.params.id;
 
-            const result = await userService.deleteUser(userId);
-            return res.status(200).json(result);
+      const result = await userService.deleteUser(userId);
+      return res.status(200).json(result);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Server error" });
+    }
+  },
 
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ message: 'Server error' });
+  // Render trang account - signup
+  async renderSignupPage(req, res) {
+    res.render("register", {
+      currentView: "login",
+    });
+  },
+
+  // Render trang account - login
+  async renderLoginPage(req, res) {
+    res.render("login", {
+      currentView: "login",
+    });
+  },
+
+  // Trang ForgotPassword
+  async renderForgotPasswordPage(req, res) {
+    res.render("forgot-password", {
+      currentView: "forgot",
+    });
+  },
+
+  // Trang điền thông tin để cập nhật
+  async renderResetPasswordPage(req, res) {
+    res.render("reset-password", {
+      currentView: "reset",
+    });
+  },
+
+  // Đăng nhập người dùng
+  async loginUser(req, res, next) {
+    // passport.authenticate("local", {
+    //   successRedirect: "/",
+    // })(req, res, next);
+
+    passport.authenticate("local", (err, user, info) => {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        return res.status(401).json({message: info.message });
+      }
+      req.logIn(user, (err) => {
+        if (err) {
+          return next(err);
         }
-    },
+        // Đăng nhập thành công
+        return res.status(200).json({message: info.message });
+      });
+    })(req, res, next);
+  },
 
-    // Render trang account - signup
-    async renderSignupPage(req, res) {
-        res.render('register', {
-            currentView: 'login'
-        })
-    },
+  // Đăng nhập người dùng bằng Google (Phải đăng ký gmail trước)
+  async loginWithGoogle(req, res) {
+    passport.authenticate("google", { scope: ["profile", "email"] })(req, res);
+  },
 
-    // Render trang account - login
-    async renderLoginPage(req, res) {
-        res.render('login', {
-            currentView: 'login'
-        })
-    },
+  // Call back cho Google
+  async callbackGoogle(req, res, next) {
+    passport.authenticate(
+      "google",
+      { failureRedirect: "/users/login" },
+      (err, user, info) => {
+        if (!user) {
+          // Người dùng không tồn tại hoặc email chưa được xác minh
+          // Chưa có thông báo
+          return res.redirect("/users/login");
+        }
+        if (!user.isVerify) {
+          // Email chưa được xác minh
+          // Chưa có thông báo
+          return res.redirect("/users/login");
+        }
 
-    // Đăng nhập người dùng
-    async loginUser(req, res, next) {
-        passport.authenticate("local", (err, user, info) => {
-            if (err) {
-              return next(err);
-            }
-            if (!user) {
-              return res.status(401).json({message: info.message });
-            }
-            req.logIn(user, (err) => {
-              if (err) {
-                return next(err);
-              }
-              // Đăng nhập thành công
-              return res.status(200).json({message: info.message });
-            });
-          })(req, res, next);
-    },
-
-    async logoutUser(req, res) {
-        req.logout(()=>{
-            res.redirect('/users/login');
+        // Xác thực thành công, đăng nhập người dùng
+        req.login(user, (err) => {
+          if (err) {
+            return next(err);
+          }
+          return res.redirect("/");
         });
-        
-    },
+      }
+    )(req, res, next);
+  },
+
+  async logoutUser(req, res) {
+    req.logout(() => {
+      res.redirect("/users/login");
+    });
+  },
+
+  // Xác minh tài khoản người dùng
+  async verifyAccount(req, res) {
+    try {
+      const { token } = req.query;
+      //   Tìm người dùng
+      const user = await userService.verifyAccount(token);
+      if (user.error) {
+        return res.status(400).send(user.error);
+      }
+      res.redirect("/users/login");
+    } catch (err) {
+      res.status(500).send("Error verifying account");
+    }
+  },
+
+  // Quên mật khẩu
+  async forgotPassword(req, res) {
+    try {
+      const { gmail } = req.body;
+      await userService.forgotPassword(gmail);
+      res.redirect("/users/reset-password")
+    } catch (err) {
+      res.status(500).send("Error sending password reset link");
+    }
+  },
+
+  // Đặt lại mật khẩu
+  async resetPassword(req, res) {
+    try {
+      const { token, password } = req.body;      
+      const user = await userService.resetPassword(token, password);
+      res.status(200).json({ message: user.message }); // Trả về JSON khi thành công
+    } catch (err) {
+      res.status(400).json({ message: "Invalid token or error resetting password" }); // Đảm bảo JSON khi có lỗi
+    }
+  },
+  // Render trang cá nhân
+  async renderProfile(req, res) {
+    res.send("PROFILE PAGE");
+  },
+
 };
 
 module.exports = userController;

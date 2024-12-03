@@ -11,27 +11,27 @@ module.exports = function (passport) {
           .then((user) => {
             if (!user) {
               return done(null, false, {message: "Username and password is not matched!"});
-            }
-
-            if (!user.isVerify) {
-              return done(null, false, { message: "User email not verified" });
-            }
-
+            } 
             bcrypt.compare(password, user.password, (err, isMatch) => {
-                if(err) throw err;
-
-                if(isMatch){
-                    if (!user.isVerify) {
-                        return done(null, false, { message: "Please active your account with registed email!" });
-                    }
-                    return done(null, user, {message: "Login successfully"});
-                } else {
-                    return done(null, false, {message: 'Username and password is not matched!'});
+              if (err) {
+                return done(err);
+              }
+  
+              if (isMatch) {
+                if (!user.isVerify) {
+                  return done(null, false, { message: "Please active your account with registed email!" });
                 }
+                return done(null, user, { message: "Login successfully" });
+              } else {
+                return done(null, false, {
+                  message: "Username and password is not matched!",
+                });
+              }
             });
           })
-          .catch((err) => console.log(err));
-    })
+          .catch((err) => done(err));
+      }
+    )
   );
 
   passport.use(
