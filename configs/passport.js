@@ -6,18 +6,12 @@ const userController = require("../apps/users/user.controller");
 
 module.exports = function (passport) {
   passport.use(
-    new LocalStrategy(
-      { usernameField: "username" },
-      (username, password, done) => {
-        userService
-          .getUserByUsername(username)
+    new LocalStrategy({ usernameField: "username" }, (username, password, done) => {
+        userService.getUserByUsername(username)
           .then((user) => {
             if (!user) {
-              return done(null, false, {
-                message: "Username and password is not matched!",
-              });
-            }
-  
+              return done(null, false, {message: "Username and password is not matched!"});
+            } 
             bcrypt.compare(password, user.password, (err, isMatch) => {
               if (err) {
                 return done(err);
@@ -90,13 +84,16 @@ module.exports = function (passport) {
 
   passport.serializeUser(function (user, done) {
     process.nextTick(function () {
-      return done(null, {
-        id: user.id,
-        username: user.username,
-        picture: user.url,
-      });
+        return done(null, {
+            id: user.id,
+            username: user.username,
+            picture: user.url,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName
+        });
     });
-  });
+});
 
   // passport.deserializeUser((id, done) => {
   //     userController.getUserById(id, (err, user) => {
