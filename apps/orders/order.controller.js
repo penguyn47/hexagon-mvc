@@ -60,6 +60,36 @@ const orderController = {
             res.status(500).json({ message: error.message });
         }
     },
+
+    async renderOrdersPage(req, res) {
+        const ordersRaw = await orderService.getOrdersByUser(req.user.id);
+    
+        // Chuyển đổi dữ liệu để chỉ giữ những gì cần thiết
+        const orders = ordersRaw.map(order => ({
+            ...order.dataValues,
+            order_items: order.order_items.map(item => ({
+                id: item.id,
+                productName: item.product.productName,  // Access productName from the nested product object
+                price: item.product.price,              // Access price from the nested product object
+                url: item.product.url,                  // Access url from the nested product object
+                quantity: item.quantity,                // Include quantity
+            })),
+        }));
+    
+        // // Log the order items to verify the structure
+        // orders.forEach(order => {
+        //     console.log(order.order_items);
+        // });
+    
+        res.render('orders', {
+            currentView: '',
+            cart: true,
+            name: req.user?.username,
+            profileImg: req.user?.picture,
+            orders,
+        });
+    }    
+    
 };
 
 module.exports = orderController;

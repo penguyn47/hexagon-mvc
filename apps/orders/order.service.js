@@ -63,12 +63,16 @@ const orderService = {
             where: { userId },
             include: [{
                 model: OrderItem,
-                include: [{ model: Product, attributes: ['id', 'productName', 'price'] }],
+                attributes: ['id', 'quantity', 'priceAtPurchase'], // Include quantity here
+                include: [{
+                    model: Product,
+                    attributes: ['id', 'productName', 'price', 'url'], // Ensure the correct attributes
+                }],
             }],
         });
-
+    
         return orders;
-    },
+    },    
 
     async getOrderProducts(orderId) {
         const order = await Order.findByPk(orderId, {

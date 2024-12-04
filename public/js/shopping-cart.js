@@ -1,89 +1,102 @@
+// Initialize cart if not present
 function initializeCart() {
     if (!localStorage.getItem("cart")) {
         localStorage.setItem("cart", JSON.stringify([]));
     }
 }
 
-function removeFromCart(button, productId) {
-    let cart = JSON.parse(localStorage.getItem("cart"));
-    cart = cart.filter(item => item.id !== productId);
-    localStorage.setItem("cart", JSON.stringify(cart));
-    const item = button.closest(".cart-item");
-    item.remove();
-    
-    const cartItemCount = document.getElementById("cart-number-items");
-
-    if (cart.length === 0) {
-        updateCartDisplay();
-        cartItemCount.innerHTML = "";
-        return;
-    } else {
-        cartItemCount.innerHTML = cart.length;
-    }
-
-    if (syncCartRemove) syncCartRemove(productId);
+// Helper function to get cart from localStorage
+function getCart() {
+    return JSON.parse(localStorage.getItem("cart"));
 }
 
+// Helper function to save cart to localStorage
+function saveCart(cart) {
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+// Remove item from cart
+function removeFromCart(button, productId) {
+    let cart = getCart();
+    cart = cart.filter(item => item.id !== productId);
+    saveCart(cart);
+    const item = button.closest(".cart-item");
+    item.remove();
+
+    updateCartDisplay();
+    syncCartRemove && syncCartRemove(productId);
+}
+
+// Get product quantity from cart
 function getProductQuantity(productId) {
-    const cart = JSON.parse(localStorage.getItem("cart"));
+    const cart = getCart();
     const product = cart.find(item => item.id === productId);
     return product ? product.quantity : 0;
 }
 
-
+// Increase product quantity in cart
 function increaseQuantity(productId, number = 1) {
-    let cart = JSON.parse(localStorage.getItem("cart"));
+    let cart = getCart();
     const product = cart.find(item => item.id === productId);
     if (product) {
-        product.quantity+= number;
-        document.getElementById(`product-${productId}-count`).innerHTML = product.quantity;
-        localStorage.setItem("cart", JSON.stringify(cart));
-        const cartList = document.getElementById("cart-list");
-        cartList.style.display = "block";
+        product.quantity += number;
+        updateCartItemQuantity(productId);
+        saveCart(cart);
 
-        if (syncCartAdd) syncCartRemove(productId, number);
+        updateCartDisplay();
+        syncCartAdd && syncCartAdd(productId, number);
     }
 }
 
+// Decrease product quantity in cart
 function decreaseQuantity(productId) {
-    let cart = JSON.parse(localStorage.getItem("cart"));
+    let cart = getCart();
     const product = cart.find(item => item.id === productId);
     if (product && product.quantity > 1) {
         product.quantity--;
-        document.getElementById(`product-${productId}-count`).innerHTML = product.quantity;
-        localStorage.setItem("cart", JSON.stringify(cart));
-        if(syncCartUpdate) syncCartUpdate(productId, product.quantity);
+        updateCartItemQuantity(productId);
+        saveCart(cart);
+
+        updateCartDisplay();
+        syncCartUpdate && syncCartUpdate(productId, product.quantity);
     }
 }
 
+// Update quantity in the UI
+function updateCartItemQuantity(productId) {
+    const product = getCart().find(item => item.id === productId);
+    if (product) {
+        document.getElementById(`product-${productId}-count`).innerHTML = product.quantity;
+    }
+}
 
+// Update cart display with smooth transitions
 async function updateCartDisplay() {
-    const cart = JSON.parse(localStorage.getItem("cart"));
+    const cart = getCart();
     const cartList = document.getElementById("cart-list");
     const cartItemCount = document.getElementById("cart-number-items");
 
-    cartList.innerHTML = `<div class="cart-footer">
-                            <span>Quick Cart</span>
-                            <button onclick="navigateToDetailsCart()">Details</button>
-                        </div>
-                        <hr>`;
+    cartList.innerHTML = `
+        <div class="cart-footer">
+            <span>Quick Cart</span>
+            <button onclick="navigateToDetailsCart()">Details</button>
+        </div>
+        <hr>`;
 
     if (cart.length === 0) {
-        cartList.innerHTML = "<p>Your cart is empty.</p>";
+        cartList.innerHTML += "<p>Your cart is empty.</p>";
         cartItemCount.innerHTML = "";
         return;
     } else {
         cartItemCount.innerHTML = cart.length;
     }
 
-    // Use a variable to accumulate all the cart items first
     let cartItemsHTML = '';
-    
+
+    // Loop through cart and fetch product data
     for (const { id: productId, quantity } of cart) {
         try {
-            const response = await fetch(`/api/products/${productId}`);
-            const product = await response.json();
-
+            const product = await getProductData(productId);
             cartItemsHTML += `
                 <div class="cart-item">
                     <img src="${product.url}" alt="${product.productName}">
@@ -101,48 +114,57 @@ async function updateCartDisplay() {
                     </div>
                 </div>
             `;
-
         } catch (error) {
             console.error(`Failed to fetch product with ID ${productId}:`, error);
         }
     }
 
-    // After all items are processed, update the cart list in one go
+    // After processing all items, update the cart list
     cartList.innerHTML += cartItemsHTML;
+
+    // Ensure the cart is displayed after updating the items (don't hide cart after update)
+    if (!cartList.classList.contains('show')) {
+        cartList.classList.add('show');
+    }
 }
 
+// Fetch product data (cached version)
+let productCache = {};  // Caching product data
+async function getProductData(productId) {
+    if (productCache[productId]) {
+        return productCache[productId];
+    }
 
-function addToCart(productId, number=1) {
-    // Lấy giỏ hàng từ localStorage
-    let cart = JSON.parse(localStorage.getItem("cart"));
+    const response = await fetch(`/api/products/${productId}`);
+    const product = await response.json();
+    productCache[productId] = product;
+    return product;
+}
 
-    // Tìm chỉ mục của sản phẩm trong giỏ hàng
+// Add product to cart or increase quantity if already in cart
+function addToCart(productId, number = 1) {
+    let cart = getCart();
     const productIndex = cart.findIndex(item => item.id === productId);
 
     if (productIndex === -1) {
-        // Nếu sản phẩm chưa có trong giỏ hàng, thêm mới với số lượng được chỉ định
         cart.push({ id: productId, quantity: number });
-        localStorage.setItem("cart", JSON.stringify(cart));
-        const cartList = document.getElementById("cart-list");
-        cartList.style.display = "block";
+        saveCart(cart);
         updateCartDisplay();
     } else {
-        // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng theo số lượng mới
         increaseQuantity(productId, number);
     }
 
-    if (syncCartAdd) syncCartAdd(productId, number);
+    syncCartAdd && syncCartAdd(productId, number);
 }
 
-
+// Hide cart on click outside
 function hideCartOnClickOutside(event) {
     const cartList = document.getElementById("cart-list");
     const cartButton = document.querySelector(".btn-primary");
 
-    // Kiểm tra nếu nhấp bên ngoài cart-list và nút giỏ hàng
     if (!cartList.contains(event.target) && !cartButton.contains(event.target)) {
-        cartList.style.display = "none";
-        document.removeEventListener("click", hideCartOnClickOutside); // Hủy bỏ sự kiện sau khi ẩn
+        cartList.classList.remove('show');
+        document.removeEventListener("click", hideCartOnClickOutside); // Remove event listener
     }
 }
 
@@ -162,10 +184,11 @@ function toggleCartList() {
     }
 }
 
+// Navigate to detailed cart page
 function navigateToDetailsCart() {
     window.location.href = '/cart';
 }
 
-
+// Initialize and update cart on page load
 initializeCart();
 updateCartDisplay();
