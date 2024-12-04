@@ -10,7 +10,10 @@ const passport = require('passport');
 const cors = require('cors');
 const flash = require('connect-flash');
 
+const { Product, User, Review, Cart, CartItem, Order, OrderItem } = require('./apps/relationships');
+
 const app = express();
+
 
 // Để sử dụng biến môi trường trong file .env
 require('dotenv').config();
@@ -60,14 +63,23 @@ hbs.registerHelper('gt', hbs_helpers.gt);
 hbs.registerHelper('lt', hbs_helpers.lt);
 hbs.registerHelper('subtract', hbs_helpers.subtract);
 hbs.registerHelper('times', hbs_helpers.times);
+hbs.registerHelper('formatDate', hbs_helpers.formatDate);
 
 // Thiết lập thư mục tĩnh
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Định nghĩa các routes
-app.use('/', require('./index.routes'));
+app.use('/', require('./apps/dashboard/index.routes'));
 app.use('/users', require('./apps/users/user.routes'));
 app.use('/products', require('./apps/products/product.routes'));
+app.use('/cart', require('./apps/carts/cart.routes'));
+app.use('/orders', require('./apps/orders/order.routes'));
+
+
+// APIs
+app.use('/api/products', require('./apps/products/product.api'));
+app.use('/api/cart', require('./apps/carts/cart.api'));
+app.use('/api/orders', require('./apps/orders/order.api'));
 
 // Kết nối database
 const connectDB = async () => {

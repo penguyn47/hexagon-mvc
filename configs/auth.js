@@ -3,7 +3,7 @@ module.exports = {
         if (req.isAuthenticated()) {
             return next();
         } else {
-            return res.status(401).json({ message: 'Unauthorized, please login first.' });
+            res.redirect('/users/login');
         }
     }
 };

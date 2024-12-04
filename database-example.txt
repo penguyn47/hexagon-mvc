@@ -29,10 +29,6 @@ Product
 - url           --thumbnail
 - urls          --pictures
 
-ProductRelated
-- product_id_1 (PK)
-- product_id_2 (PK)
-
 ProductReview
 - review_id (PF)
 - product_id (FK)
@@ -54,7 +50,6 @@ Order
 - order_id (PF)
 - user_id (FK)
 - payment_method
-- shipping_address_id (FK)
 - order_status
 - order_date
 - total_cost

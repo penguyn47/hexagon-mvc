@@ -41,6 +41,14 @@ const User = db.define(
       type: DataTypes.STRING,
     },
 
+    // Cho chức năng quên mật khẩu
+    resetPasswordToken: {
+      type: DataTypes.STRING,
+    },
+    resetPasswordExpires: {
+      type: DataTypes.DATE,
+    },
+
     isAdmin: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,

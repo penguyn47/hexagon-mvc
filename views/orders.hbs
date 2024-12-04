@@ -1,0 +1,71 @@
+<br>
+<br>
+<br>
+<br>
+
+<div class="container">
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Order ID</th>
+                <th>Payment Method</th>
+                <th>Shipping Address</th>
+                <th>Order Status</th>
+                <th>Order Date</th>
+                <th>Total Cost</th>
+                <th>Order Items</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each orders}}
+            <tr>
+                <td>{{id}}</td>
+                <td>{{paymentMethod}}</td>
+                <td>{{shippingAddress}}</td>
+                <td>
+                    <span class="badge 
+                        {{#if  (eq orderStatus 'pending') }}badge-warning{{/if}}
+                        {{#if  (eq orderStatus 'completed') }}badge-success{{/if}}
+                        {{#if  (eq orderStatus 'cancelled')}}badge-danger{{/if}}">
+                        {{orderStatus}}
+                    </span>
+                </td>
+                <td>{{formatDate orderDate}}</td>
+                <td>${{totalCost}}</td>
+                <td>
+                    <!-- Button to toggle the collapsible row -->
+                    <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#orderItems-{{id}}" aria-expanded="false" aria-controls="orderItems-{{id}}">
+                        View Items
+                    </button>
+                </td>
+            </tr>
+            <!-- Collapsible row for order items -->
+            <tr class="collapse" id="orderItems-{{id}}">
+                <td colspan="7">
+                    <!-- Collapsible container for order items -->
+                    <div class="container mt-3">
+                        <div class="row">
+                            {{#each order_items}}
+                            <div class="col-md-4 mb-3">
+                                <div class="card shadow-sm">
+                                    <img src="{{url}}" alt="{{productName}}" class="card-img-top" style="width: 100px; height: 100px; object-fit: cover;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{productName}}</h5>
+                                        <p class="card-text">Ordered price: ${{price}}</p>
+                                        <p class="card-text"><strong>Quantity: {{quantity}}</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+                            {{/each}}
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>

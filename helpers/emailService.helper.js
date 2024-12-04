@@ -39,9 +39,9 @@ module.exports.sendResetPasswordEmail = async (email, token) => {
     subject: "Password Reset Request",
     html: `
       <h1>Password Reset</h1>
-      <p>Token to reset your password:</p>
-      <p>${token}</p>
-      <p>This link will expire in 1 hour.</p>
+      <p>We received a request to reset your password. Please use the token below to reset your password:</p>
+      <p style="font-size: 20px; font-weight: bold; color: #FF5733;">${token}</p>
+      <p>This token will expire in 15 minutes. If you did not request a password reset, please ignore this email.</p>
     `,
   };
 

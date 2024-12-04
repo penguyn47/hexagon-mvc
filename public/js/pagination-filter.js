@@ -4,7 +4,7 @@ let sortOrder = 'asc'; // Mặc định là tăng dần
 const fetchProducts = async (filters = {}) => {
     try {
         const params = new URLSearchParams(filters).toString();
-        const response = await fetch(`/products/api?${params}`);
+        const response = await fetch(`/api/products?${params}`);
 
         const data = await response.json();
 
@@ -65,8 +65,7 @@ const fetchProducts = async (filters = {}) => {
                             <div class="hover-content">
                                 <ul>
                                     <li><a href="/products/${product.id}"><i class="fa fa-eye"></i></a></li>
-                                    <li><a href="/products/${product.id}"><i class="fa fa-star"></i></a></li>
-                                    <li><a href="/products/${product.id}"><i class="fa fa-shopping-cart"></i></a></li>
+                                    <li><a href="javascript:void(0);" onclick="addToCart(${product.id})"><i class="fa fa-shopping-cart"></i></a></li>
                                 </ul>
                             </div>
                             <img style="height: 300px; object-fit: cover;" src="${product.url}" alt="${product.productName}">
@@ -211,5 +210,15 @@ const fetchProducts = async (filters = {}) => {
     }
 };
 
+const __url = new URL(window.location.href);
+const __params = new URLSearchParams(__url.search);
+
+const __paramsObject = {pageSize: 9};
+__params.forEach((value, key) => {
+  __paramsObject[key] = value;
+});
+
+console.log(__paramsObject);
+
 // Fetch products on page load
-fetchProducts({pageSize: 9});
+fetchProducts(__paramsObject);

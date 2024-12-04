@@ -1,3 +1,5 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
 <!-- ***** Main Banner Area Start ***** -->
 <div class="page-heading" id="top">
     <div class="container">
@@ -63,12 +65,12 @@
                         <li><i class="fa fa-star"></i></li>
                         {{/times}}
                     </ul>
-                    <span>{{product.description}}</span>
+                    <span style="font-size: 1.5rem;">{{product.description}}</span>
                     <div class="quote">
                         <p style="font-size:1.25rem"><b>Category: </b></p>
-                        <p>{{product.category}}</p>
+                        <span style="font-size: 1.5rem;">{{product.category}}</span>
                         <p style="font-size:1.25rem"><b>Manufacturer: </b></p>
-                        <p>{{product.manufacturer}}</p>
+                        <span style="font-size: 1.5rem;">{{product.manufacturer}}</span>
                     </div>
                     <div class="quantity-content">
                         <div class="left-content">
@@ -85,7 +87,7 @@
                     </div>
                     <div class="total">
                         <h4>Total: ${{product.price}}</h4>
-                        <div class="main-border-button"><a href="#">Add To Cart</a></div>
+                        <div class="main-border-button" onclick="OnClickAdd({{product.id}})"><a href="#">Add To Cart</a></div>
                     </div>
                 </div>
             </div>
@@ -130,5 +132,5 @@
 </section>
 <!-- ***** Related Products Area Ends ***** -->
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/single-product.js"></script>
