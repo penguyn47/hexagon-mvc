@@ -1,5 +1,7 @@
 const nodemailer = require("nodemailer");
 
+require('dotenv').config();
+
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
@@ -11,7 +13,7 @@ const transporter = nodemailer.createTransport({
 });
 
 module.exports.sendVerificationEmail = async (email, token) => {
-  const verificationLink = `http://127.0.0.1:3000/users/verify?token=${token}`;
+  const verificationLink = `${process.env.HOST_WEB}/users/verify?token=${token}`;
   const mailOptions = {
     from: process.env.EMAIL,
     to: email,

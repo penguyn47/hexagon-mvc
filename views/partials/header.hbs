@@ -1,3 +1,9 @@
+<script>
+    let syncCartAdd = null;
+    let syncCartRemove = null;
+    let syncCartUpdate = null;
+</script>
+
 <!-- ***** Header Area Start ***** -->
 <header class="header-area header-sticky">
     <div class="container">
@@ -40,3 +46,29 @@
     </div>
 </header>
 <!-- ***** Header Area End ***** -->
+
+<!-- Fixed Cart Button -->
+{{#if cart}}
+
+{{else}}
+<div class="cart-container">
+    <!-- Cart List -->
+    <div id="cart-list" class="cart-list">
+        <!-- Cart items will be dynamically loaded here -->
+    </div>
+    
+    <!-- Cart Button -->
+    <button type="button" class="btn btn-primary" style="background-color: #333; height: 40px;" onclick="toggleCartList()">
+        <i class="bi bi-cart" style="font-size: 20px; font-weight: bold;"></i>
+        <span id="cart-number-items" class="badge bg-danger" style="font-size: 15px;">3</span>
+    </button>
+</div>
+
+<script src="/js/shopping-cart.js"></script>
+
+{{/if}}
+
+{{#if name}}
+<script src="/js/sync-cart.js"></script>
+{{/if}}
+

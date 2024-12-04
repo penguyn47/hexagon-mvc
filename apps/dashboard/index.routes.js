@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { uploadPhoto, resizeAndUploadImage } = require('./middlewares/imageUploadMiddleware');
+const { uploadPhoto, resizeAndUploadImage } = require('../../middlewares/imageUploadMiddleware');
 
 
 router.get('/', (req, res) => {
@@ -19,7 +19,6 @@ router.get('/about', (req, res) => {
     })
 })
 
-
 router.get('/contact', (req, res) => {
     res.render('contact', {
         currentView: 'contact',
@@ -27,15 +26,6 @@ router.get('/contact', (req, res) => {
         profileImg: req.user?.picture,
     })
 })
-
-router.get('/products', (req, res) => {
-    res.render('products', {
-        currentView: 'products',
-        name: req.user?.username,
-        profileImg: req.user?.picture,
-    })
-})
-
 
 router.get('/admin', (req, res) => {
     res.render('admin', {
@@ -53,11 +43,5 @@ router.post('/profileImg', uploadPhoto.array('profileImg', 1), resizeAndUploadIm
     }
     res.json({ message: 'Upload success', imageUrl: req.imageUrl });
 });
-
-
-
-
-
-
 
 module.exports = router;

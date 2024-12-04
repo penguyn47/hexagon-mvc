@@ -14,10 +14,10 @@ const Order = db.define('order', {
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
-      isIn: [['credit_card', 'paypal', 'cash_on_delivery']], // Các phương thức thanh toán hợp lệ
+      isIn: [['banking', 'cash_on_delivery']], // Các phương thức thanh toán hợp lệ
     },
   },
-  shippingAddressId: {
+  shippingAddress: {
     type: DataTypes.STRING,
     allowNull: false,
   },

@@ -21,4 +21,7 @@ module.exports = {
         }
         return result;
     },
+    formatDate: (date) => {
+        return new Date(date).toLocaleString();
+    },
 };
