@@ -10,8 +10,10 @@ module.exports = function (passport) {
         userService.getUserByUsername(username)
           .then((user) => {
             if (!user) {
-              return done(null, false, {message: "Username and password is not matched!"});
-            } 
+              return done(null, false, {
+                message: "Username and password is not matched!",
+              });
+            }
             bcrypt.compare(password, user.password, (err, isMatch) => {
               if (err) {
                 return done(err);
@@ -33,6 +35,7 @@ module.exports = function (passport) {
       }
     )
   );
+  
 
   passport.use(
     new GoogleStrategy(
