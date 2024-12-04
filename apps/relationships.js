@@ -1,61 +1,59 @@
-const Product = require('./products/product.model');
-const Review = require('./reviews/review.model');
-const User = require('./users/user.model');
+const Product = require("./products/product.model");
+const Review = require("./reviews/review.model");
+const User = require("./users/user.model");
 
-const Cart = require('./carts/cart.model');
-const CartItem = require('./carts/cart_item.model');
+const Cart = require("./carts/cart.model");
+const CartItem = require("./carts/cart_item.model");
 
-const Order = require('./orders/order.model');
-const OrderItem = require('./orders/order_item.model');
+const Order = require("./orders/order.model");
+const OrderItem = require("./orders/order_item.model");
 
 // Product có nhiều Review
 Product.hasMany(Review, {
-  foreignKey: 'productId',
-  onDelete: 'CASCADE',
+  foreignKey: "productId",
+  onDelete: "CASCADE",
 });
 
 // Review thuộc về một Product
 Review.belongsTo(Product, {
-  foreignKey: 'productId',
+  foreignKey: "productId",
 });
 
 // Review thuộc về một User
 Review.belongsTo(User, {
-    foreignKey: 'userId',
-    onDelete: 'SET NULL', // Khi xóa User, giữ lại Review nhưng không có User liên kết
+  foreignKey: "userId",
+  onDelete: "SET NULL", // Khi xóa User, giữ lại Review nhưng không có User liên kết
 });
 
 // User có nhiều Review
 User.hasMany(Review, {
-    foreignKey: 'userId',
+  foreignKey: "userId",
 });
 
 // Mỗi User chỉ có một Cart
 User.hasOne(Cart, {
-  foreignKey: 'userId',
-  onDelete: 'CASCADE', // Xóa User thì xóa luôn Cart
+  foreignKey: "userId",
+  onDelete: "CASCADE", // Xóa User thì xóa luôn Cart
 });
 
 Cart.belongsTo(User, {
-  foreignKey: 'userId',
+  foreignKey: "userId",
 });
 
 // Một giỏ hàng có thể chứa nhiều sản phẩm (CartItem)
-Cart.hasMany(CartItem, { foreignKey: 'cartId' });
-CartItem.belongsTo(Cart, { foreignKey: 'cartId' });
-
+Cart.hasMany(CartItem, { foreignKey: "cartId" });
+CartItem.belongsTo(Cart, { foreignKey: "cartId" });
 
 // Mối quan hệ giữa User và Order
-User.hasMany(Order, { foreignKey: 'userId' });
-Order.belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(Order, { foreignKey: "userId" });
+Order.belongsTo(User, { foreignKey: "userId" });
 
 // Mối quan hệ giữa Order và OrderItem
-Order.hasMany(OrderItem, { foreignKey: 'orderId' });
-OrderItem.belongsTo(Order, { foreignKey: 'orderId' });
+Order.hasMany(OrderItem, { foreignKey: "orderId" });
+OrderItem.belongsTo(Order, { foreignKey: "orderId" });
 
 // Mối quan hệ giữa OrderItem và Product
-OrderItem.belongsTo(Product, { foreignKey: 'productId' });
-Product.hasMany(OrderItem, { foreignKey: 'productId' });
-
+OrderItem.belongsTo(Product, { foreignKey: "productId" });
+Product.hasMany(OrderItem, { foreignKey: "productId" });
 
 module.exports = { Product, User, Review, Cart, CartItem, Order, OrderItem };
