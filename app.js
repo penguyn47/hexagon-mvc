@@ -14,6 +14,7 @@ const { Product, User, Review } = require('./apps/relationships');
 
 const app = express();
 
+
 // Để sử dụng biến môi trường trong file .env
 require('dotenv').config();
 
