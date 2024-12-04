@@ -88,7 +88,7 @@ const connectDB = async () => {
     try {
         await db.authenticate();
         // Đồng bộ các models
-        await db.sync({ force: true });
+        await db.sync({ force: false });
         console.log('Database connection established');
     } catch (e) {
         console.log('Database connection failed', e);
