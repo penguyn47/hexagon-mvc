@@ -3,7 +3,7 @@
 <br>
 <br>
 
-<div class="container mt-4" style="height:400px;">
+<div class="container mt-4" style="min-height:400px;">
     <table class="table table-bordered table-striped">
         <thead class="thead-dark">
             <tr>
@@ -37,9 +37,13 @@
                         {{#if  (eq paymentStatus 'paid') }}badge-success{{/if}}
                         {{#if  (eq paymentStatus 'refunded')}}badge-danger{{/if}}">
                     {{#if (eq paymentStatus 'unpaid')}}
+                    {{#if (eq paymentMethod 'banking')}}
                         <a href="orders/payment/{{id}}">{{paymentStatus}}</a>
                     {{else}}
                         {{paymentStatus}}
+                    {{/if}}
+                    {{else}}
+                    {{paymentStatus}}
                     {{/if}}
                     </span>
                 </td>
