@@ -5,11 +5,8 @@ const { ensureAuthenticated } = require('../../configs/auth');
 
 router.get('/',ensureAuthenticated, orderController.renderOrdersPage);
 
-router.get("/payment/:id", ensureAuthenticated, orderController.paymentMethod);
+router.post("/payment/success", orderController.paymentSuccess);
 
-router.get(
-  "/payment/success/:id",
-  orderController.paymentSuccess
-);
+router.get("/payment/:id", ensureAuthenticated, orderController.paymentMethod);
 
 module.exports = router;

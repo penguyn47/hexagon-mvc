@@ -37,6 +37,11 @@ const Order = db.define('order', {
       isIn: [['pending', 'processing', 'shipped', 'completed', 'cancelled']], // Các trạng thái hợp lệ
     },
   },
+  orderCode: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    defaultValue: () => Math.floor(Math.random() * 1000000)
+  },
   orderDate: {
     type: DataTypes.DATE,
     allowNull: false,

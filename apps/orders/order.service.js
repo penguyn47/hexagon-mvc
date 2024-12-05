@@ -119,10 +119,12 @@ const orderService = {
       ],
     });
     if (!order) throw new Error("Order not found");
+    order.orderCode = Math.floor(Math.random() * 1000000);
+    await order.save();
     const dataForm = {
-      orderCode: Math.floor(Math.random() * 1000000),
+      orderCode: order.orderCode,
       //   amount: order.totalCost,
-      amount: 2000,
+      amount: 10000,
       description: "Thanh toan don hang",
       items: order.order_items.map((item) => ({
         name: item.product.productName,
@@ -130,18 +132,18 @@ const orderService = {
         price: item.product.price,
       })),
       //   Tự cài lại sau
-      cancelUrl: "http://localhost:3000/orders",
-      returnUrl: `http://localhost:3000/orders/payment/success/${orderId}`,
+      cancelUrl: "https://dc9c-113-161-66-26.ngrok-free.app/orders",
+      returnUrl: `https://dc9c-113-161-66-26.ngrok-free.app/orders`,
     };
 
     return dataForm;
   },
 
-  async setPaymentStatus(orderId) {
-    const order = await Order.findByPk(orderId);
+  async setPaymentStatusSuccess(orderCode) {
+    const order = await Order.findOne({ where: { orderCode } });
     if (!order) throw new Error("Order not found");
 
-    order.paymentStatus = 'paid';
+    order.paymentStatus = "paid";
     await order.save();
 
     return order;

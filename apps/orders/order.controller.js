@@ -112,12 +112,12 @@ const orderController = {
 
   async paymentSuccess(req, res) {
     try {
-      const orderId = req.params.id;
-    //   res.send("Ok")
-      await orderService.setPaymentStatus(orderId, 'success');
+      const data = paymentHelper.verifyPaymentWebhook(req);
+      const orderCode = data.orderCode;
+      await orderService.setPaymentStatusSuccess(orderCode);
       res.redirect(303, "http://localhost:3000/orders");
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message});
     }
   },
 };
