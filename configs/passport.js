@@ -57,7 +57,7 @@ module.exports = function (passport) {
           //   Nếu không thấy thì tạo mới
           if (!user) {
             const newUser = {
-              username: email.replace('@gmail.com', ''),
+              username: email,
               email: email,
               password: null,
               isVerify: true,
