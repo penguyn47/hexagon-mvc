@@ -80,6 +80,7 @@ app.use('/orders', require('./apps/orders/order.routes'));
 app.use('/api/products', require('./apps/products/product.api'));
 app.use('/api/cart', require('./apps/carts/cart.api'));
 app.use('/api/orders', require('./apps/orders/order.api'));
+app.use('/api/reviews', require('./apps/reviews/review.api'));
 
 // Kết nối database
 const connectDB = async () => {
