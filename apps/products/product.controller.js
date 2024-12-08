@@ -1,4 +1,5 @@
 const productService = require('./product.service');
+const reviewService = require('../reviews/review.service')
 
 const productController = {
     // Lấy danh sách sản phẩm (phân trang)
@@ -94,12 +95,30 @@ const productController = {
             const product = await productService.getProductById(productId);
             let relatedProducts = await productService.getRelatedProductsByCategory(productId);
             relatedProducts = relatedProducts.map(product => product.dataValues);
+            const reviews = await reviewService.getReviewsByProduct(productId);
+            const formattedReviews = reviews.map(review => ({
+                id: review.dataValues.id,
+                productId: review.dataValues.productId,
+                userId: review.dataValues.userId,
+                comment: review.dataValues.comment,
+                rating: review.dataValues.rating,
+                createdAt: review.dataValues.createdAt,
+                updatedAt: review.dataValues.updatedAt,
+                user: {
+                    id: review.dataValues.user.id,
+                    username: review.dataValues.user.username,
+                    profileImg: review.dataValues.user.url
+                }
+            }));
+            
             res.render('singleProduct', {
                 currentView: 'products',
                 name: req.user?.username,
+                userId: req.user?.id,
                 profileImg: req.user?.picture,
                 product: product.dataValues,
                 relatedProducts: relatedProducts,
+                reviews: formattedReviews
             })
         } catch (error) {
             res.status(404).json({ message: error.message }); // Nếu không tìm thấy, trả về 404

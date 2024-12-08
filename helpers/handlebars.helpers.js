@@ -1,3 +1,5 @@
+const Handlebars = require('handlebars');
+
 module.exports = {
     range: function (start, end, query, category, brand, min, max, rating) {
         let result = [];
@@ -23,5 +25,12 @@ module.exports = {
     },
     formatDate: (date) => {
         return new Date(date).toLocaleString();
+    },
+    formatRate: (rating) => {
+        // Tạo chuỗi sao đầy
+        const fullStars = '<i class="fa fa-star"></i>'.repeat(rating);
+        // Tạo chuỗi sao rỗng (màu xám)
+        const emptyStars = '<i class="fa fa-star-o" style="color: gray;"></i>'.repeat(5 - rating);
+        return new Handlebars.SafeString(fullStars + emptyStars);
     },
 };

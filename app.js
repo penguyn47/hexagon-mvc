@@ -64,6 +64,7 @@ hbs.registerHelper('lt', hbs_helpers.lt);
 hbs.registerHelper('subtract', hbs_helpers.subtract);
 hbs.registerHelper('times', hbs_helpers.times);
 hbs.registerHelper('formatDate', hbs_helpers.formatDate);
+hbs.registerHelper('stars', hbs_helpers.formatRate);
 
 // Thiết lập thư mục tĩnh
 app.use(express.static(path.join(__dirname, 'public')));
@@ -80,6 +81,7 @@ app.use('/orders', require('./apps/orders/order.routes'));
 app.use('/api/products', require('./apps/products/product.api'));
 app.use('/api/cart', require('./apps/carts/cart.api'));
 app.use('/api/orders', require('./apps/orders/order.api'));
+app.use('/api/reviews', require('./apps/reviews/review.api'));
 
 // Kết nối database
 const connectDB = async () => {
