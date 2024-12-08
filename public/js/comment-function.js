@@ -111,3 +111,88 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+    // Lắng nghe sự kiện click trên các nút Edit
+    const editButtons = document.querySelectorAll('.edit-comment');
+    
+    editButtons.forEach(button => {
+        button.addEventListener('click', async (event) => {
+        
+            const reviewId = event.target.getAttribute('data-id');
+            const productId = event.target.getAttribute('data-product-id');
+
+            // Lấy bình luận cần chỉnh sửa
+            const reviewElement = event.target.closest('.list-group-item'); // Giả sử reviewElement là parent div của mỗi bình luận
+            const ratingText = reviewElement.querySelector('.rating').textContent;  // Đoạn text "Rated 4/5"
+            const commentText = reviewElement.querySelector('.comment-text').textContent;  // Nội dung bình luận
+
+            // Chuyển rating text thành số
+            const rating = ratingText.match(/\d+/)[0];  // Lấy số trong "Rated 4/5"
+
+            // Tạo form dưới bình luận để chỉnh sửa
+            const formHtml = `
+                <form id="editCommentForm" style="padding: 10px;" data-review-id="${reviewId}" data-product-id="${productId}">
+                    <div class="mb-3">
+                        <label for="rating" class="form-label">Rating</label>
+                        <select class="form-select" id="rating">
+                            <option value="5" ${rating == 5 ? 'selected' : ''}>5 - Excellent</option>
+                            <option value="4" ${rating == 4 ? 'selected' : ''}>4 - Very Good</option>
+                            <option value="3" ${rating == 3 ? 'selected' : ''}>3 - Good</option>
+                            <option value="2" ${rating == 2 ? 'selected' : ''}>2 - Fair</option>
+                            <option value="1" ${rating == 1 ? 'selected' : ''}>1 - Poor</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="comment" class="form-label">Comment</label>
+                        <textarea class="form-control" id="comment" rows="3" placeholder="Write your comment here...">${commentText}</textarea>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            `;
+
+            // Thêm form vào dưới bình luận
+            const commentSection = reviewElement.querySelector('.comment-section');
+
+            commentSection.innerHTML = formHtml;  // Thêm form vào khu vực bình luận (có class .comment-section)
+
+            // Lắng nghe sự kiện submit form
+            const editForm = document.getElementById('editCommentForm');
+            editForm.addEventListener('submit', async (e) => {
+                e.preventDefault();  // Ngừng hành động submit mặc định
+
+                const newRating = document.getElementById('rating').value;
+                const newComment = document.getElementById('comment').value;
+
+                try {
+                    // Gửi dữ liệu cập nhật lên server
+                    const response = await fetch(`/api/reviews/${productId}/${reviewId}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ rating: newRating, comment: newComment })
+                    });
+
+                    if (response.ok) {
+                        // Nếu thành công, cập nhật lại bình luận và rating trên giao diện
+                        const updatedReview = await response.json();
+                        reviewElement.querySelector('.rating').textContent = `Rated ${updatedReview.rating}/5`;
+                        reviewElement.querySelector('.comment-text').textContent = updatedReview.comment;
+                        // Xóa form sau khi cập nhật thành công
+                        editForm.remove();
+                        // Thông báo thành công
+                        alert('Comment updated successfully!');
+                    } else {
+                        alert('Failed to update the comment');
+                    }
+                } catch (error) {
+                    console.error('Error updating comment:', error);
+                    alert('There was an error updating your comment');
+                }
+            });
+        });
+    });
+});
+

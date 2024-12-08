@@ -121,10 +121,10 @@
                                     <span class="text-warning">
                                         {{stars this.rating}}
                                     </span>
-                                    <small class="text-muted ms-2">Rated {{this.rating}}/5</small>
+                                    <small class="rating text-muted ms-2">Rated {{this.rating}}/5</small>
                                 </div>
                                 <!-- Phần Comment -->
-                                <p class="mb-1" style="font-size: 1.25rem;">{{this.comment}}</p>
+                                <p class="comment-text mb-1" style="font-size: 1.25rem;">{{this.comment}}</p>
                                 <small class="text-muted">{{formatDate this.updatedAt}}</small>
                                 <!-- Thêm các nút Sửa và Xóa nếu user trùng -->
                                 {{#if (eq ../name this.user.username)}}
@@ -133,7 +133,10 @@
                                     <button class="btn btn-sm btn-danger delete-comment" data-id="{{this.id}}" data-product-id="{{../product.id}}">Delete</button>
                                 </div>
                                 {{/if}}
+                                <!-- Thêm phần comment-section ở đây -->
+                                <div class="comment-section"></div>
                             </div>
+
                         </div>
                     </div>
                     {{/each}}
