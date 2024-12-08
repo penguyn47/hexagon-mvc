@@ -7,7 +7,12 @@ const ReviewService = {
   async createReview(data) {
     try {
       const review = await Review.create(data);
-      return review;
+      const createdReview = await Review.findByPk(review.id, {
+        include: [
+          { model: User, attributes: ['id', 'username', 'url'] },
+        ],
+      });
+      return createdReview;
     } catch (error) {
       throw new Error(`Error creating review: ${error.message}`);
     }
@@ -19,7 +24,7 @@ const ReviewService = {
       const reviews = await Review.findAll({
         where: { productId },
         include: [
-          { model: User, attributes: ['id', 'username', 'email'] }, // Bao gồm thông tin user
+          { model: User, attributes: ['id', 'username', 'url'] }, // Bao gồm thông tin user
         ],
       });
       return reviews;
@@ -34,7 +39,7 @@ const ReviewService = {
       const review = await Review.findByPk(reviewId, {
         include: [
           { model: Product, attributes: ['id', 'name'] }, // Bao gồm thông tin sản phẩm
-          { model: User, attributes: ['id', 'name', 'email'] }, // Bao gồm thông tin user
+          { model: User, attributes: ['id', 'username', 'url'] }, // Bao gồm thông tin user
         ],
       });
       if (!review) throw new Error('Review not found');
