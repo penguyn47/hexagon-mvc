@@ -70,3 +70,44 @@ document.getElementById("commentForm").addEventListener("submit", async function
         alert("An error occurred while adding the comment.");
     }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Lắng nghe sự kiện click trên các nút Delete
+    const deleteButtons = document.querySelectorAll('.delete-comment');
+    
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', async (event) => {
+            // Lấy id của review và product từ data attribute
+            const reviewId = event.target.getAttribute('data-id');
+            const productId = event.target.getAttribute('data-product-id');
+            
+            // Xác nhận hành động xóa
+            if (confirm('Are you sure you want to delete this comment?')) {
+                try {
+                    // Gọi API DELETE với fetch
+                    const response = await fetch(`/api/reviews/${productId}/${reviewId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    // Kiểm tra xem API có trả về thành công không
+                    if (response.ok) {
+                        // Nếu xóa thành công, xóa phần tử bình luận khỏi DOM
+                        const commentElement = event.target.closest('.list-group-item');
+                        commentElement.remove();
+                        alert('Comment deleted successfully!');
+                    } else {
+                        // Nếu có lỗi, thông báo lỗi cho người dùng
+                        alert('Failed to delete the comment. Please try again.');
+                    }
+                } catch (error) {
+                    console.error('Error deleting comment:', error);
+                    alert('There was an error with the request. Please try again.');
+                }
+            }
+        });
+    });
+});
+

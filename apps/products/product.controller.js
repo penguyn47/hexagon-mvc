@@ -110,6 +110,7 @@ const productController = {
                     profileImg: review.dataValues.user.url
                 }
             }));
+            
             res.render('singleProduct', {
                 currentView: 'products',
                 name: req.user?.username,
