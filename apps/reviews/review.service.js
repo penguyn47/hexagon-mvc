@@ -2,16 +2,21 @@ const Review = require('../reviews/review.model');
 const Product = require('../products/product.model');
 const User = require('../users/user.model');
 
-class ReviewService {
+const ReviewService = {
   // Tạo review mới
   async createReview(data) {
     try {
       const review = await Review.create(data);
-      return review;
+      const createdReview = await Review.findByPk(review.id, {
+        include: [
+          { model: User, attributes: ['id', 'username', 'url'] },
+        ],
+      });
+      return createdReview;
     } catch (error) {
       throw new Error(`Error creating review: ${error.message}`);
     }
-  }
+  },
 
   // Lấy tất cả review cho một sản phẩm
   async getReviewsByProduct(productId) {
@@ -19,14 +24,14 @@ class ReviewService {
       const reviews = await Review.findAll({
         where: { productId },
         include: [
-          { model: User, attributes: ['id', 'name', 'email'] }, // Bao gồm thông tin user
+          { model: User, attributes: ['id', 'username', 'url'] }, // Bao gồm thông tin user
         ],
       });
       return reviews;
     } catch (error) {
       throw new Error(`Error fetching reviews for product: ${error.message}`);
     }
-  }
+  },
 
   // Lấy một review theo ID
   async getReviewById(reviewId) {
@@ -34,7 +39,7 @@ class ReviewService {
       const review = await Review.findByPk(reviewId, {
         include: [
           { model: Product, attributes: ['id', 'name'] }, // Bao gồm thông tin sản phẩm
-          { model: User, attributes: ['id', 'name', 'email'] }, // Bao gồm thông tin user
+          { model: User, attributes: ['id', 'username', 'url'] }, // Bao gồm thông tin user
         ],
       });
       if (!review) throw new Error('Review not found');
@@ -42,7 +47,7 @@ class ReviewService {
     } catch (error) {
       throw new Error(`Error fetching review by ID: ${error.message}`);
     }
-  }
+  },
 
   // Cập nhật review
   async updateReview(reviewId, data) {
@@ -54,7 +59,7 @@ class ReviewService {
     } catch (error) {
       throw new Error(`Error updating review: ${error.message}`);
     }
-  }
+  },
 
   // Xóa review
   async deleteReview(reviewId) {
@@ -69,4 +74,4 @@ class ReviewService {
   }
 }
 
-module.exports = new ReviewService();
+module.exports = ReviewService;

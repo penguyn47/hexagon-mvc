@@ -2,11 +2,6 @@ const { DataTypes } = require('sequelize');
 const db = require('../../configs/db');
 
 const Review = db.define('review', {
-    content: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-    },
-
     productId: {
         type: DataTypes.INTEGER,
         allowNull: false,
