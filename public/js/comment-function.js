@@ -52,6 +52,10 @@ document.getElementById("commentForm").addEventListener("submit", async function
                         <!-- Phần Comment -->
                         <p class="mb-1">${result.comment}</p>
                         <small class="text-muted">${new Date(result.updatedAt).toLocaleString()}</small>
+                        <div class="mt-2">
+                            <button class="btn btn-sm btn-warning edit-comment" data-id="${result.comment.id}" data-product-id="${productId}">Edit</button>
+                            <button class="btn btn-sm btn-danger delete-comment" data-id="${result.comment.id}" data-product-id="${productId}">Delete</button>
+                        </div>
                     </div>
                 </div>
             `;
