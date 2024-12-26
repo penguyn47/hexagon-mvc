@@ -3,7 +3,7 @@
 <br>
 <br>
 
-<div class="container">
+<div class="container mt-4" style="min-height:400px;">
     <table class="table table-bordered table-striped">
         <thead class="thead-dark">
             <tr>
@@ -11,6 +11,7 @@
                 <th>Payment Method</th>
                 <th>Shipping Address</th>
                 <th>Order Status</th>
+                <th>Payment Status</th>
                 <th>Order Date</th>
                 <th>Total Cost</th>
                 <th>Order Items</th>
@@ -30,7 +31,23 @@
                         {{orderStatus}}
                     </span>
                 </td>
-                <td>{{formatDate orderDate}}</td>
+                <td>
+                    <span class="badge 
+                        {{#if  (eq paymentStatus 'unpaid') }}badge-warning{{/if}}
+                        {{#if  (eq paymentStatus 'paid') }}badge-success{{/if}}
+                        {{#if  (eq paymentStatus 'refunded')}}badge-danger{{/if}}">
+                    {{#if (eq paymentStatus 'unpaid')}}
+                    {{#if (eq paymentMethod 'banking')}}
+                        <a href="orders/payment/{{id}}">{{paymentStatus}}</a>
+                    {{else}}
+                        {{paymentStatus}}
+                    {{/if}}
+                    {{else}}
+                    {{paymentStatus}}
+                    {{/if}}
+                    </span>
+                </td>
+                <td>{{formatDate orderDate "DD/MM/YYYY"}}</td>
                 <td>${{totalCost}}</td>
                 <td>
                     <!-- Button to toggle the collapsible row -->
