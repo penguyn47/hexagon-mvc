@@ -1,5 +1,6 @@
 const productService = require('./product.service');
-const reviewService = require('../reviews/review.service')
+const reviewService = require('../reviews/review.service');
+const { log } = require('handlebars/runtime');
 
 const productController = {
     // Lấy danh sách sản phẩm (phân trang)
@@ -95,7 +96,7 @@ const productController = {
             const product = await productService.getProductById(productId);
             let relatedProducts = await productService.getRelatedProductsByCategory(productId);
             relatedProducts = relatedProducts.map(product => product.dataValues);
-            const reviews = await reviewService.getReviewsByProduct(productId);
+            const reviews = await reviewService.getReviewsByProduct(productId, 0);
             const formattedReviews = reviews.map(review => ({
                 id: review.dataValues.id,
                 productId: review.dataValues.productId,
@@ -132,6 +133,16 @@ const productController = {
             profileImg: req.user?.picture,
         })
     },
+    async getProductComment(req, res) {
+        try {
+            const productId = req.params.id;
+            const page = parseInt(req.params.page);            
+            const comments = await reviewService.getReviewsByProduct(productId, page);
+            res.status(200).json(comments);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
 };
 
 module.exports = productController;
