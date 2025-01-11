@@ -132,8 +132,8 @@ const orderService = {
       price: item.product.price,
       })),
       //   Tự cài lại sau
-      cancelUrl: `${process.env.HOST_WEB}/orders`,
-      returnUrl: `${process.env.HOST_WEB}/orders`,
+      cancelUrl: `${process.env.HOST_WEB}orders`,
+      returnUrl: `${process.env.HOST_WEB}orders`,
     };
 
     return dataForm;
