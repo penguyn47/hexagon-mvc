@@ -21,6 +21,14 @@ const Order = db.define('order', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  paymentStatus: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: 'unpaid', // Trạng thái mặc định là "unpaid"
+    validate: {
+      isIn: [['unpaid', 'paid', 'refunded']], // Các trạng thái hợp lệ
+    },
+  },
   orderStatus: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -28,6 +36,11 @@ const Order = db.define('order', {
     validate: {
       isIn: [['pending', 'processing', 'shipped', 'completed', 'cancelled']], // Các trạng thái hợp lệ
     },
+  },
+  orderCode: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    defaultValue: () => Math.floor(Math.random() * 1000000)
   },
   orderDate: {
     type: DataTypes.DATE,

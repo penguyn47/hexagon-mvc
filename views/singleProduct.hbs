@@ -140,6 +140,11 @@
                         </div>
                     </div>
                     {{/each}}
+                    <div class="d-flex justify-content-center mt-4">
+                        <button class="btn btn-primary btn-previous me-2" style="width: 100px;" {{#unless reviews.length}}hidden{{/unless}}>Previous</button>
+                        <button class="btn btn-success" style="width: 100px;" {{#unless reviews.length}}hidden{{/unless}}>Next</button>
+                        <p id="num-page" hidden>0</p>
+                    </div>
                 </div>
                 <!-- Thêm bình luận -->
                 {{#if name}}
@@ -147,7 +152,7 @@
                     <div class="card-header">
                         <h5>Add a Comment</h5>
                     </div>
-                    <div class="card-body" userID="{{user.id}}" ProductId="{{product.id}}">
+                    <div class="card-body" userID="{{userId}}" ProductId="{{product.id}}">
                         <form id="commentForm" style="padding: 10px;">
                             <div class="mb-3">
                                 <label for="rating" class="form-label">Rating</label>
