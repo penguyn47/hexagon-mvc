@@ -127,13 +127,13 @@ const orderService = {
       amount: 10000,
       description: "Thanh toan don hang",
       items: order.order_items.map((item) => ({
-        name: item.product.productName,
-        quantity: item.quantity,
-        price: item.product.price,
+      name: item.product.productName,
+      quantity: item.quantity,
+      price: item.product.price,
       })),
       //   Tự cài lại sau
-      cancelUrl: "https://dc9c-113-161-66-26.ngrok-free.app/orders",
-      returnUrl: `https://dc9c-113-161-66-26.ngrok-free.app/orders`,
+      cancelUrl: `${process.env.HOST_WEB}/orders`,
+      returnUrl: `${process.env.HOST_WEB}/orders`,
     };
 
     return dataForm;

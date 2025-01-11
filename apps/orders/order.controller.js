@@ -115,7 +115,7 @@ const orderController = {
       const data = paymentHelper.verifyPaymentWebhook(req);
       const orderCode = data.orderCode;
       await orderService.setPaymentStatusSuccess(orderCode);
-      res.redirect(303, "http://localhost:3000/orders");
+      res.redirect(303, `${process.env.HOST_WEB}/orders`);
     } catch (error) {
       res.status(500).json({ message: error.message});
     }
