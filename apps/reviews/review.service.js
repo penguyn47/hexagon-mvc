@@ -17,14 +17,16 @@ const ReviewService = {
       throw new Error(`Error creating review: ${error.message}`);
     }
   },
-
-  // Lấy tất cả review cho một sản phẩm
-  async getReviewsByProduct(productId) {
+  async getReviewsByProduct(productId, page = 0) {
+    const limit = 4;
+    const offset = page * limit;
     try {
       const reviews = await Review.findAll({
         where: { productId },
+        limit: limit,
+        offset: offset,
         include: [
-          { model: User, attributes: ['id', 'username', 'url'] }, // Bao gồm thông tin user
+          { model: User, attributes: ["id", "username", "url"] }, // Bao gồm thông tin user
         ],
       });
       return reviews;
@@ -32,7 +34,6 @@ const ReviewService = {
       throw new Error(`Error fetching reviews for product: ${error.message}`);
     }
   },
-
   // Lấy một review theo ID
   async getReviewById(reviewId) {
     try {
