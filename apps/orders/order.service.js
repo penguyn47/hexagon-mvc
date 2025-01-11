@@ -141,7 +141,7 @@ const orderService = {
 
   async setPaymentStatusSuccess(orderCode) {
     const order = await Order.findOne({ where: { orderCode } });
-    if (!order) throw new Error("Order not found");
+    if (!order) return { message: "Order not found" };
 
     order.paymentStatus = "paid";
     await order.save();
