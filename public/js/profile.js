@@ -28,7 +28,7 @@ function showSuccess(message) {
 // Enable editing profile fields
 editButton.addEventListener('click', () => {
     inputs.forEach(input => {
-        if (input.id !== 'email') {
+        if (input.id !== 'email' && input.id !== 'username') {
             input.removeAttribute('readonly');
         }
     });
@@ -56,11 +56,11 @@ cancelPasswordButton.addEventListener('click', () => {
 
 // Validation for profile form
 function validateProfileForm(formObject) {
-    const usernamePattern = /^[a-zA-Z0-9_]+$/;
-    if (!usernamePattern.test(formObject.username)) {
-        showError('Username cannot contain special characters.');
-        return false;
-    }
+    // const usernamePattern = /^[a-zA-Z0-9_]+$/;
+    // if (!usernamePattern.test(formObject.username)) {
+    //     showError('Username cannot contain special characters.');
+    //     return false;
+    // }
     for (let key in formObject) {
         if (formObject[key].length > 255) {
             showError(`${key} must be less than 255 characters.`);
