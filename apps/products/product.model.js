@@ -26,8 +26,13 @@ const Product = db.define('product', {
         type: DataTypes.INTEGER,
     },
 
-    stock_quanity: {
+    stock_quantity: {
         type: DataTypes.INTEGER,
+    },
+
+    status: {
+        type: DataTypes.STRING,
+        defaultValue: "On Stock",
     },
 
     url: { // thumbnail

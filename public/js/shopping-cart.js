@@ -102,7 +102,7 @@ async function updateCartDisplay() {
                     <img src="${product.url}" alt="${product.productName}">
                     <div class="item-details">
                         <p>${product.productName}</p>
-                        <span class="stock-info">(Stock: ${product.stock_quanity})</span>
+                        <span class="stock-info">(Stock: ${product.stock_quantity})</span>
                     </div>
                     <div class="item-actions">
                         <div class="quantity-control">
