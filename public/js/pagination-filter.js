@@ -26,6 +26,13 @@
         productList.innerHTML = '';
         const fragment = document.createDocumentFragment();
 
+        const loadingPlaceholder = document.getElementById('loading-placeholder');
+
+        // Xóa loading placeholder
+        if (loadingPlaceholder) {
+            loadingPlaceholder.remove();
+        }
+
         products.products.forEach(product => {
             const div = document.createElement('div');
             div.className = 'col-lg-4';
@@ -38,7 +45,7 @@
                                 <li><a href="javascript:void(0);" onclick="addToCart(${product.id})"><i class="fa fa-shopping-cart"></i></a></li>
                             </ul>
                         </div>
-                        <img style="height: 300px; object-fit: cover;" src="${product.url}" alt="${product.productName}">
+                        <img style="height: 300px; object-fit: contain; background-color: #d7d8d9" src="${product.url}" alt="${product.productName}">
                     </div>
                     <div class="down-content">
                         <h4>${product.productName}</h4>
@@ -52,12 +59,15 @@
         });
         productList.appendChild(fragment);
 
+        const queryInfo = document.getElementById('query-info');
         const sectionTitle = document.getElementById('sectionTitle');
         const sectionDescription = document.getElementById('sectionDescription');
         if (products.filters.q) {
+            queryInfo.style.display='block';
             sectionTitle.innerHTML = `Search for "${products.filters.q}" with filters`;
             sectionDescription.innerHTML = `Found ${products.products.length} products`;
         } else {
+            queryInfo.style.display='none';
             sectionTitle.innerHTML = '';
             sectionDescription.innerHTML = '';
         }
@@ -127,8 +137,7 @@
 
     const fetchProducts = async (filters = {}) => {
         try {
-            document.getElementById('products-loader').style.visibility = 'visible';
-
+            showLoadingPlaceholders();
             const params = new URLSearchParams(filters).toString();
             console.log(params);
             const response = await fetch(`/api/products?${params}`);
@@ -145,7 +154,7 @@
             console.error('Error fetching products:', error);
             document.getElementById('error-message').innerText = 'Failed to fetch products. Please try again later.';
         } finally {
-            document.getElementById('products-loader').style.visibility = "hidden";
+
         }
     };
 
@@ -231,3 +240,12 @@ const getCurrentFilters = () => {
         q: document.getElementById('search-query').value,
     };
 };
+
+function showLoadingPlaceholders() {
+    const productList = document.getElementById('product-list');
+    productList.innerHTML = '';
+    const loadingHTML = `
+        ${'<div class="col-lg-4 col-md-6 col-sm-12 mb-4 loading-item"><div class="loading-box"></div></div>'.repeat(9)}
+    `;
+    productList.innerHTML = loadingHTML;
+}
