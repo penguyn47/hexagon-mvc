@@ -16,6 +16,9 @@ const productService = {
     async getProductById(productId) {
         try {
             const product = await Product.findByPk(productId); // Tìm sản phẩm theo primary key
+            if(product && product.status == 'Suspend'){
+                return null;
+            }
             if (!product) {
                 throw new Error('Product not found');
             }
@@ -52,6 +55,8 @@ const productService = {
             if (filters.q) {
                 where.productName = { [Op.iLike]: `%${filters.q}%` }; // Tìm kiếm gần đúng
             }
+
+            where.status = {[Op.ne]: 'Suspend'};
 
 
             // Gán giá trị mặc định cho _sortBy và _orderBy

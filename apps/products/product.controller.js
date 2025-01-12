@@ -94,6 +94,11 @@ const productController = {
         try {
             const productId = req.params.id; // Lấy id từ URL
             const product = await productService.getProductById(productId);
+
+            if(!product) {
+                return res.status(404).json({message: "product is suspended"});
+            }
+
             let relatedProducts = await productService.getRelatedProductsByCategory(productId);
             relatedProducts = relatedProducts.map(product => product.dataValues);
             const reviews = await reviewService.getReviewsByProduct(productId, 0);

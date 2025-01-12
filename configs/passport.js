@@ -23,6 +23,7 @@ module.exports = function (passport) {
                 if (!user.isVerify) {
                   return done(null, false, { message: "Please active your account with registed email!" });
                 }
+                if(user.isBanned) return done(null, false, { message: "Your account is banned" });
                 return done(null, user, { message: "Login successfully" });
               } else {
                 return done(null, false, {
@@ -93,7 +94,8 @@ module.exports = function (passport) {
             picture: user.url,
             email: user.email,
             firstName: user.firstName,
-            lastName: user.lastName
+            lastName: user.lastName,
+            isBanned: user.isBanned,
         });
     });
 });
