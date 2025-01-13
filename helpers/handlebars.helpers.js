@@ -33,4 +33,11 @@ module.exports = {
         const emptyStars = '<i class="fa fa-star-o" style="color: gray;"></i>'.repeat(5 - rating);
         return new Handlebars.SafeString(fullStars + emptyStars);
     },
+    truncate: (str, maxLength) => {
+        if (typeof str !== "string") return str;
+        if (str.length > maxLength) {
+            return `${str.slice(0, maxLength - 3)}...`;
+        }
+        return str;
+    },
 };

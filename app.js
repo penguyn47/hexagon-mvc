@@ -65,6 +65,7 @@ hbs.registerHelper('subtract', hbs_helpers.subtract);
 hbs.registerHelper('times', hbs_helpers.times);
 hbs.registerHelper('formatDate', hbs_helpers.formatDate);
 hbs.registerHelper('stars', hbs_helpers.formatRate);
+hbs.registerHelper('truncate', hbs_helpers.truncate);
 
 // Thiết lập thư mục tĩnh
 app.use(express.static(path.join(__dirname, 'public')));
